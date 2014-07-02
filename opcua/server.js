@@ -47,8 +47,11 @@ var the_session, the_subscription;
 var connect = function(callback) {
     client.connect(endpointUrl, function(err) {
         if (err) {
+            //reconnect ? 
             console.log(" cannot connect to endpoint :", endpointUrl);
-        } else {
+        } 
+        else {
+            
             logger.info("connected !");
             console.log("connected !");
         }
@@ -140,7 +143,7 @@ var subscribe = function(callback) {
 
     for (i = 0; i < tags.length; i++) {
         
-        var tag = tags[i];
+        var tag = tags[i].tag;
 
         var monitoredItem = the_subscription.monitor({
             nodeId: opcua.resolveNodeId(tag),
