@@ -1,0 +1,17 @@
+{
+    
+"server":{
+    
+    "port" : 62261,
+    
+    "endpointUrl" : "opc.tcp://127.0.0.1:49380",
+    
+    "tags":["ns=2;s=Channel1.Device1.test", "ns=2;s=Channel1.Device1.Tag2"]
+    
+    },
+    
+       "db":{
+        "con_string": "postgres://mabotech:mabouser@localhost:6432/maboss"
+    }
+    
+}
