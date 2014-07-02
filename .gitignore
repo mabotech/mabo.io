@@ -2,6 +2,10 @@
 logs
 *.log
 
+*.zip
+
+*.pyc
+
 # Runtime data
 pids
 *.pid
