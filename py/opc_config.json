@@ -1,0 +1,60 @@
+{
+
+"groups":["BLI.42700M","BLI.42701S", "TC01","TC02","TC03","TC04"],
+"mode":"dcom",
+"host":"10.177.198.20",
+"port":7766,
+"opc_server":"SWToolbox.TOPServer.V5",
+"opc_host":"10.177.198.28",
+"timeout":20000,
+
+"BLI.42700M":{"interval" : 0.5,
+	"station":"42700",
+	"path":"HT-TEST.PLC",
+	"alias":["Flag", "PalletNo", "SerialNo", "TestCell", "TestCount", 
+				"TestStatus", "TestTypeRun1", "TestTypeRun2", "TestTypeRun3"],
+	"points":["Flag", "PalletNo", "SerialNo", "TestCell", "TestCount", 
+				"TestStatus", "TestTypeRun1", "TestTypeRun2", "TestTypeRun3"]},
+
+"BLI.42701S":{"interval" : 0.5, 
+	"station":"42700", 
+	"path":"HT-TEST.PLC",
+	"alias":["SerialNo", "Spot"], 
+	"points":["SerialNo", "Spot"]},
+
+"TC01":{"interval" : 0.5, 
+		"station":"GCIC_TC01",
+		"path":"AVL.t1",
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]},
+
+"TC02":{"interval" : 0.5, 
+		"station":"GCIC_TC02",
+		"path":"AVL.t2",
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]},
+
+"TC03":{"interval" : 0.5, 
+		"station":"GCIC_TC03",
+		"path":"AVL.t3",
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]},
+
+"TC04":{"interval" : 0.5,
+		"station":"GCIC_TC04",
+		"path":"AVL.t4", 
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]}
+}

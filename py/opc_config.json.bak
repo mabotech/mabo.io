@@ -1,0 +1,54 @@
+{
+
+"groups":["BLI.42700M","BLI.42701S"],
+"mode":"dcom",
+"host":"10.177.198.20",
+"port":7766,
+"opc_server":"SWToolbox.TOPServer.V5",
+"opc_host":"10.177.198.28",
+"timeout":20000,
+
+"BLI.42700M":{"interval" : 0.5,
+	"path":"HT-TEST.PLC",
+	"alias":["Flag", "PalletNo", "SerialNo", "TestCell", "TestCount", 
+				"TestStatus", "TestTypeRun1", "TestTypeRun2", "TestTypeRun3"],
+	"points":["DB405.DB0.1", "DB405.DB1.3", "DB900.DB20.8", "DB405.DB15.17", "DB405.DB18.19", 
+				"DB405.DB20.20", "DB405.DB21.22", "DB405.DB23.24", "DB405.DB25.26"]},
+
+"BLI.42701S":{"interval" : 0.5,  
+	"path":"HT-TEST.PLC",
+	"alias":["SerialNo", "Spot"], 
+	"points":["DB900.DB20.8", "DB900.DW608"]},
+
+"TC01":{"interval" : 0.5, 
+		"path":"TC01",
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]},
+
+"TC02":{"interval" : 0.5, 
+		"path":"TC02",
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]},
+
+"TC03":{"interval" : 0.5, 
+		"path":"TC03",
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]},
+
+"TC04":{"interval" : 0.5,
+		"path":"TC04", 
+		"alias":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"], 
+
+		 "points":["ENGINE_RUNNING", "ERROR", "ENGINE_WAITING_FOR_START",
+			 "NO_ENGINE_IN_TESTCELL", "SUMP_LEVEL_MAX", "TESTRUN_ERROR", "SERVICE_MODE"]}
+}
