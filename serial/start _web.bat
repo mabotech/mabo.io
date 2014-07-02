@@ -1,0 +1,3 @@
+python welding.py
+
+pause
