@@ -13,7 +13,7 @@ node-opcua
 
 - data collection
 
-## Todo
+## Road-map
 
 - rule based action routing
 - reconnect

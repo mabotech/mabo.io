@@ -8,11 +8,16 @@
 
         "tags": [{
             "tag": "ns=2;s=Channel1.Device1.test",
-            "actions": [{"val":1, "atype":"log", "action":"mt1"},{"val":2, "atype":"log", "action":"mt1"}]
+            "queues": [{"1":"mt2"},{"2":"mt1"},{"*":"log"}]
         }, {
-            "tag": "ns=2;s=Channel1.Device1.Tag2"
+            "tag": "ns=2;s=Channel1.Device1.Tag2",
+            "queues": [{"1":"t2"},{"2":"t3"},{"*":"log"}]
         }]
 
+    },
+    
+    "redis":{
+        "host":"localhost"
     },
 
     "db": {
