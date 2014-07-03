@@ -1,4 +1,4 @@
-maboss.io
+mabo.io
 =======
 
 mabotech IOT(Internet of Things)
@@ -11,12 +11,10 @@ mabotech IOT(Internet of Things)
 
 ## spec
 
-OPC AC
-
-OPC DA
-
-OPC UA
-
+- [OPC](https://opcfoundation.org/)
+- [OPC DA](https://opcfoundation.org/developer-tools/specifications-classic/data-access/)
+- OPC AC
+- OPC UA
 - [MQTT](http://mqtt.org/)
 
 

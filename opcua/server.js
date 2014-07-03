@@ -108,6 +108,34 @@ var readVal = function(callback) {
     });
 };
 
+var DataType = opcua.DataType;
+var AttributeIds = opcua.AttributeIds;
+
+var writeVal = function(callback){   
+    
+            var nodesToWrite = [
+                {
+                    nodeId: "ns=2;s=Channel1.Device1.test",
+                    attributeId: AttributeIds.Value,
+                    value: /*new DataValue(*/{
+                        value: { /* Variant */ dataType: DataType.UInt32,value: 6226  }
+                    }
+                }
+            ];
+    
+     the_session.write(nodesToWrite, function(err, statusCodes) {
+          if (!err) {
+              console.log(statusCodes);
+          }else{
+            console.log(err);
+          }
+         //
+         callback(err);
+     })
+    
+};
+
+
 /*
   *
   */
@@ -188,6 +216,8 @@ async.series([
 
         // step 4 : read a variable
         //readVal,
+
+        writeVal,
 
         // step 5: install a subscription and install a monitored item for 10 seconds
         subscribe,
