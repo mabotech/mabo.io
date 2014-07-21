@@ -1,7 +1,7 @@
 mabo.io
 =======
 
-mabotech IOT(Internet of Things)
+mabotech M2M & IOT(Internet of Things)
 
 ## Components
 
