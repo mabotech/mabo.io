@@ -1,4 +1,9 @@
+
+
+
+    
 from pymodbus.client.sync import ModbusTcpClient
+
 
 client = ModbusTcpClient('127.0.0.1')
 client.write_coil(1, True)
