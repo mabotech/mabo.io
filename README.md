@@ -3,6 +3,15 @@ mabo.io
 
 mabotech M2M & IOT(Internet of Things)
 
+## Functions
+
+- OPC tag configuration
+- read / write tag
+- Redis client, set returned value to redis by calling lua script
+- reconnect
+- logging
+
+
 ## Components
 
 - OPC UA [Node OPCUA](https://github.com/node-opcua/node-opcua)
