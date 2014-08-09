@@ -37,8 +37,8 @@ class AKClient(object):
         cmd = "AVFI"
         cmd = " " + cmd + " "
         leng = len(cmd)
-        fmt = "!b%ds4b" % (leng)
-        buf = struct.pack(fmt, 0x02, cmd, 0x41+i, 0x20, 3, 0)
+        fmt = "!b%ds3b" % (leng)
+        buf = struct.pack(fmt, 0x02, cmd, 0x41+i, 0x20, 3)
 
         print repr(buf)
         
