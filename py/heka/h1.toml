@@ -1,0 +1,105 @@
+[hekad]
+maxprocs = 4
+base_dir = "E:/mabodev/dc/hekad" 
+share_dir = "E:/mabodev/dc/hekad/share/heka"
+
+
+# Heka dashboard for internal metrics and time series graphs
+#[Dashboard]
+#type = "DashboardOutput"
+#address = ":4352"
+#ticker_interval = 15
+#static_directory = "./dasher" 
+
+#[DashboardOutput]
+#ticker_interval = 15
+#encoder = "PayloadEncoder"
+
+#[HttpInput]
+#url = "http://127.0.0.1:4161/nodes"
+#ticker_interval = 10
+#success_severity = 6
+#error_severity = 1
+
+[HttpListenInput]
+address = "0.0.0.0:8325"
+
+[test_TcpInput]
+type = "TcpInput"
+address = "0.0.0.0:5565"
+parser_type = "regexp"
+delimiter = ",|$"
+#decoder = "ProtobufDecoder"
+
+[test_log]
+type = "LogstreamerInput"
+rescan_interval  = "5s"
+log_directory = "E:\\mabodev\\dc\\hekad\\bin"
+#log_directory = "E:\\"
+file_match = 'test.log'
+#file_match = 'sync_test.log'
+
+#[ESJsonEncoder]
+#index = "%{Type}-%{2006.01.02}"
+#es_index_from_timestamp = true
+#type_name = "%{Type}"
+
+[PayloadEncoder]
+append_newlines = true
+prefix_ts = true
+ts_format = "2006/01/02 3:04:05PM MST"
+
+
+
+[log_file]
+type = "FileOutput"
+message_matcher = "Type == 'abc'"
+path = "./counter-output2.log"
+#prefix_ts = true
+perm = "666"
+flush_count = 1
+flush_operator = "OR"
+encoder = "PayloadEncoder"
+
+#[test_HttpOutput]
+#type = "HttpOutput"
+#message_matcher = "Type=='heka.httpdata.request'"
+#address  = "http://127.0.0.1:4151/put?topic=test"
+#method  = "POST"
+#encoder = "PayloadEncoder"
+
+[OPCAgg]
+type = "SandboxEncoder"
+filename = "./lua_encoders/opc_agg.lua"
+ticker_interval = 10
+
+[demo_counter]
+type = "SandboxFilter"
+message_matcher = "Type == 'NetworkInput'"
+ticker_interval = 6
+filename = "./lua_encoders/opc_agg.lua"
+preserve_data = true
+
+
+[console_log]
+type = "LogOutput"
+message_matcher = "TRUE"
+#encoder = "PayloadEncoder"
+encoder = "PayloadEncoder"
+
+
+[AlertEncoder]
+type = "SandboxEncoder"
+filename = "./lua_encoders/alert.lua"
+
+
+[FxaAlert]
+type = "SmtpOutput"
+message_matcher = "Type=='abc'"
+send_from = "@mabotech.com"
+send_to = ["@mabotech.com"]
+auth = "Plain"
+user = ""
+password = "passwd"
+host = "mabotech.com:25"
+encoder = "AlertEncoder"
