@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 
 """ 
 AK Client 
@@ -28,9 +30,12 @@ log.push_application()
 
 import aklib
 
-
+STX = 0x02
+ETX = 0x03
+BLANK = 0x20
+K = ord('K')
     
-funcs = {"ABCD":aklib.a1,"AVFI":aklib.a2}
+funcs = {"ABCD": aklib.a1, "AVFI": aklib.a2}
 
 
 class AKClient(object):
@@ -50,8 +55,8 @@ class AKClient(object):
         
         conf = get_conf("ak_client.toml")
         
-        self.host = conf["client"]["host"]   # The remote host
-        self.port = conf["client"]["port"]   # The same port as used by the server
+        self.host = conf["client"]["host"]
+        self.port = conf["client"]["port"] 
         
         self.retry = 3
         
@@ -59,11 +64,13 @@ class AKClient(object):
         
         self.timeout = 6
         
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
     def connect(self):
         
         """ connect """
         try:
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            
             
             self.sock.connect((self.host, self.port))
             
@@ -72,15 +79,16 @@ class AKClient(object):
             self.sock = None
             
     @classmethod
-    def pack(cls, i):
+    def pack(cls, cmd):
         
         """ pack """
         
-        cmd = "AVFI"
-        cmd = " " + cmd + " "
+        #cmd = "AVFI"
+      
         clen = len(cmd)
-        fmt = "!b%ds3b" % (clen)
-        buf = struct.pack(fmt, 0x02, cmd, 0x41+i, 0x20, 3)
+        fmt = "!2b%ds5b" % (clen)
+        
+        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, 0, BLANK, ETX)
         print(buf)
         return buf
     
@@ -96,14 +104,14 @@ class AKClient(object):
         
         data = self.sock.recv(1024)
         
-        dlen = len(data) - 9
+        dlen = len(data) - 10
         
-        if dlen<0:
+        if dlen < 0:
             raise Exception("struct error")
-        #fmt = "%db" % (len(data))
+            
         print ( data )
         
-        fmt = "!2b4s2b%ds1b" % (dlen)
+        fmt = "!2b4s3b%ds1b" % (dlen)
         
         val = struct.unpack(fmt, data)
         
@@ -111,9 +119,12 @@ class AKClient(object):
         msg = "Cmd:[%s],Error:[%s], Data:[%s]" % (val[2], val[4], val[5])
         logger.debug ( msg )
         
-        f = funcs[val[2]]
-        f(val[5])
-
+        if val[2] in funcs:
+            func = funcs[val[2]]
+            func(val[5])
+        else:
+            raise Exception("no parser")
+            
         cmd = val[2]
         
         return cmd
@@ -132,20 +143,17 @@ def main():
     
     logger.info("start AK client")
     
-    ak_client = AKClient()
+    ak_client = AKClient()    
     
-    
-    
-    c = 0
+    connected = 0
     
     i = 0
     
     retry = 0
     
-    while 1:
-        
+    while 1:        
    
-        if c == 0:
+        if connected == 0:
             
             if retry < 5:
                 ak_client.connect()
@@ -157,7 +165,7 @@ def main():
             retry = retry + 1
             continue
         else:
-            c = 1
+            connected = 1
             retry = 0
             
         i = i+1
@@ -167,13 +175,13 @@ def main():
             
         try:
             
-            buf = ak_client.pack(i)
+            cmd = "AVFI"
+            
+            buf = ak_client.pack(cmd)
             
             ak_client.send(buf)
             
             ak_client.recv()
-            
-
             
         except Exception as ex:
             print (ex)
@@ -184,7 +192,7 @@ def main():
                 print("closed?")
 
             #ak_client.connect()
-            c = 0
+            connected = 0
             
         gevent.sleep(1)
     #ak_client.close()        

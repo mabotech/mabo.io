@@ -1,15 +1,22 @@
+# -*- coding: utf-8 -*-
 
+
+"""
+simulator for AK Server
+"""
 
 import socket
 import sys
-from thread import *
+
+import thread
+#from thread import *
 
 import struct
 
 import logbook
-import gevent
+#import gevent
 
-from time import time, strftime, localtime
+from time import strftime, localtime
 
 from utils import get_conf
 
@@ -23,12 +30,30 @@ log = logbook.RotatingFileHandler('ak_srv.log', max_size=10240, backup_count=5)
 
 log.push_application()
 
-def clientthread(conn):
-    #Sending message to connected client
-    #conn.send('Welcome to the server. Type something and hit enter\n') #send only takes string
-     
-    #infinite loop so that function do not terminate and thread do not end.
+STX = 0x02
+ETX = 0x03
+BLANK = 0x20
+
+def pack(cmd):
     
+    clen = len(cmd)
+    
+    dt = strftime("%Y-%m-%d %H:%M:%S", localtime())
+    
+    data = "MABO TEST " + dt
+    dlen = len(data)
+    
+    fmt = "!2b%ds3b%ds1b" % (clen, dlen)
+    
+    buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, 0x01, BLANK, data, ETX) 
+    
+    print buf
+    
+    return buf
+
+def clientthread(conn):
+    
+    """ client thread """
     try:
         while True:
              
@@ -43,21 +68,12 @@ def clientthread(conn):
             
             print(val)
             
-            reply = idata
             if not idata: 
                 break
                 
-            cmd = "ABCD"
-            cmd =  cmd
-            clen = len(cmd)
+    
+            buf = pack("ABCD")
             
-            dt = strftime("%Y-%m-%d %H:%M:%S", localtime())
-            
-            data = "MABO 001,002,003" + dt
-            dlen = len(data)
-            fmt = "!2b%ds2b%ds1b" % (clen, dlen)
-            buf = struct.pack(fmt, 0x02, 0x20, cmd, 0x20, 0x01, data, 3)   
-            print buf
             conn.sendall(buf)
          
         #came out of loop
@@ -70,28 +86,31 @@ def clientthread(conn):
 
 
 def main(): 
+    """ main """
     
     conf = get_conf("ak_server.toml")
     
     logger.info("start AK simulator server")
-    HOST = conf["server"]["host"]#'127.0.0.1'   # Symbolic name meaning all available interfaces
+    host = conf["server"]["host"]
     
-    PORT = conf["server"]["port"]#6010 # Arbitrary non-privileged port
+    port = conf["server"]["port"]
      
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print 'Socket created'
      
     #Bind socket to local host and port
     try:
-        s.bind((HOST, PORT))
+        sock.bind((host, port))
+        
     except socket.error as msg:
+        
         print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
         sys.exit()
          
     print 'Socket bind complete'
      
     #Start listening on socket
-    s.listen(10)
+    sock.listen(10)
     print 'Socket now listening'
      
     #Function for handling connections. This will be used to create threads
@@ -99,13 +118,14 @@ def main():
     #now keep talking with the client
     while 1:
         #wait to accept a connection - blocking call
-        conn, addr = s.accept()
+        conn, addr = sock.accept()
         print 'Connected with ' + addr[0] + ':' + str(addr[1])
          
-        #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-        start_new_thread(clientthread ,(conn,))
+        # start new thread takes 1st argument as a function name to be run, 
+        # second is the tuple of arguments to the function.
+        thread.start_new_thread(clientthread ,(conn,))
      
-    s.close()
+    sock.close()
     
 if __name__ == "__main__":
     main()

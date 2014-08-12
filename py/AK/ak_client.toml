@@ -4,3 +4,9 @@
 
 host = "127.0.0.1"
 port = 6010
+
+retry = 5
+retry_interval = 3
+
+timeout = 10
+
