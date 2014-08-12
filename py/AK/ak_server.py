@@ -32,7 +32,7 @@ log.push_application()
 
 STX = 0x02
 ETX = 0x03
-BLANK = 0x20
+BLANK = 0x20 # 
 
 def pack(cmd):
     

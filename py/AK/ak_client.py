@@ -8,15 +8,13 @@ AK Protocol
 """
 
 import socket
-
 import struct
 
 #import aklib
 import logbook
 import gevent
 
-
-from utils import get_conf
+from conf import Conf
 
 logbook.set_datetime_format("local")
 
@@ -24,19 +22,28 @@ logger = logbook.Logger('AKC')
 
 #log = logbook.FileHandler('heka_tcp.log')
 
-log = logbook.RotatingFileHandler('ak_cli.log', max_size=10240, backup_count=5)
-
-log.push_application()
-
 import aklib
+
+
 
 STX = 0x02
 ETX = 0x03
 BLANK = 0x20
 K = ord('K')
     
+        
 
+conf = Conf()
 
+log = logbook.RotatingFileHandler(conf.logfile, max_size = conf.max_size, \
+                                    backup_count = conf.backup_count)
+
+log.push_application()
+
+class Logger(object):
+
+    def __init__(self):
+        pass
 
 class AKClient(object):
     
@@ -53,17 +60,23 @@ class AKClient(object):
         
         """ init """
         
-        conf = get_conf("ak_client.toml")
+        #conf = get_conf("ak_client.toml")
         
+        """
         self.host = conf["client"]["host"]
-        self.port = conf["client"]["port"] 
+        self.port = conf["client"]["port"]
         
-        self.retry = 3
+        self.ticker_interval = conf["client"]["ticker_interval"] 
         
-        self.retry_interval = 2
+        self.max_retry = conf["client"]["max_retry"]        
+        self.retry_interval = conf["client"]["retry_interval"]        
+        self.timeout = conf["client"]["timeout"]
         
-        self.timeout = 6
+        self.equipment = conf["client"]["equipment"]
+        self.channel_number = conf["client"]["channel_number"]
         
+        self.non_data_len = conf["client"]["non_data_len"]
+        """
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
     def connect(self):
@@ -72,14 +85,13 @@ class AKClient(object):
         try:
             
             
-            self.sock.connect((self.host, self.port))
+            self.sock.connect((conf.host, conf.port))
             
         except Exception as ex:
             print ex
             self.sock = None
             
-    @classmethod
-    def pack(cls, cmd):
+    def pack(self, cmd):
         
         """ pack """
         
@@ -88,7 +100,7 @@ class AKClient(object):
         clen = len(cmd)
         fmt = "!2b%ds5b" % (clen)
         print fmt
-        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, 0, BLANK, ETX)
+        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, conf.channel_number, BLANK, ETX)
         print(buf)
         return buf
     
@@ -104,7 +116,7 @@ class AKClient(object):
         
         data = self.sock.recv(1024)
         
-        dlen = len(data) - 10
+        dlen = len(data) - conf.non_data_len#10
         
         if dlen < 0:
             raise Exception("struct error")
@@ -139,68 +151,76 @@ class AKClient(object):
     def close(self):
         
         """ close socket """
+        
         self.sock.close()
  
-def main():
-    
-    """ main """
-    
-    logger.info("start AK client")
-    
-    ak_client = AKClient()    
-    
-    connected = 0
-    
-    i = 0
-    
-    retry = 0
-    
-    while 1:        
-   
-        if connected == 0:
-            
-            if retry < 5:
-                ak_client.connect()
-            else:
-                break
-           
-            
-        if ak_client.sock == None:
-            retry = retry + 1
-            continue
-        else:
-            connected = 1
-            retry = 0
-            
-        i = i+1
+    def run(self):
         
-        if i > 20:
-            i = 1
+        """ run """  
+        
+        connected = 0
+        
+        i = 0
+        
+        retry = 0
+        
+        while 1:        
+       
+            if connected == 0:
+                
+                if retry < conf.max_retry:
+                    self.connect()
+                else:
+                    break
+               
+                
+            if self.sock == None:
+                retry = retry + 1
+                continue
+            else:
+                connected = 1
+                retry = 0
+                
+            i = i+1
             
-        try:
-            
-            cmd = "AVFI"
-            
-            buf = ak_client.pack(cmd)
-            
-            ak_client.send(buf)
-            
-            ak_client.recv()
-            
-        except Exception as ex:
-            print (ex)
+            if i > 20:
+                i = 1
+                
             try:
-                ak_client.close()
+                
+                cmd = "AVFI"
+                
+                buf = self.pack(cmd)
+                
+                self.send(buf)
+                
+                self.recv()
+                
             except Exception as ex:
                 print (ex)
-                print("closed?")
+                try:
+                    self.close()
+                except Exception as ex:
+                    print (ex)
+                    print("closed?")
 
-            #ak_client.connect()
-            connected = 0
-            
-        gevent.sleep(1)
-    #ak_client.close()        
-        
+                #ak_client.connect()
+                connected = 0
+                
+            gevent.sleep(conf.ticker_interval)
+        #ak_client.close()        
+
+def main():
+    """ main """
+    logger.info("start AK client")
+    
+    ak_client = AKClient() 
+    
+    ak_client.run()
+    
+    cfg = Conf()
+    
+    
 if __name__ == '__main__':
     
     main()
