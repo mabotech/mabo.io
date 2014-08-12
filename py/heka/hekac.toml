@@ -1,0 +1,7 @@
+
+[client]
+
+host = "127.0.0.1"
+port = 5567
+
+ticker_interval = 6
