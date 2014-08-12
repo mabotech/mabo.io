@@ -62,8 +62,16 @@ def clientthread(conn):
             idata = conn.recv(1024)
             logger.debug("recv")
             
-            fmt = "%db" % (len(idata))
+            dlen = len(idata) - 11
             
+            #print dlen
+            
+            if dlen > 0:   
+                fmt = "!2b4s4b%ds1d" % (dlen)
+                
+            else:
+                fmt = "!2b4s5b"
+                
             val = struct.unpack(fmt, idata)
             
             print(val)
@@ -72,7 +80,7 @@ def clientthread(conn):
                 break
                 
     
-            buf = pack("ABCD")
+            buf = pack(val[2])
             
             conn.sendall(buf)
          

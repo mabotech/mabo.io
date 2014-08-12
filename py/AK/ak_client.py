@@ -35,7 +35,7 @@ ETX = 0x03
 BLANK = 0x20
 K = ord('K')
     
-funcs = {"ABCD": aklib.a1, "AVFI": aklib.a2}
+
 
 
 class AKClient(object):
@@ -87,7 +87,7 @@ class AKClient(object):
       
         clen = len(cmd)
         fmt = "!2b%ds5b" % (clen)
-        
+        print fmt
         buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, 0, BLANK, ETX)
         print(buf)
         return buf
@@ -116,14 +116,18 @@ class AKClient(object):
         val = struct.unpack(fmt, data)
         
         print(val)
-        msg = "Cmd:[%s],Error:[%s], Data:[%s]" % (val[2], val[4], val[5])
-        logger.debug ( msg )
         
-        if val[2] in funcs:
-            func = funcs[val[2]]
-            func(val[5])
-        else:
-            raise Exception("no parser")
+        msg = "Cmd:[%s],Error:[%s], Data:[%s]" % (val[2], val[4], val[6])
+        
+        #logger.debug ( msg )
+        
+        try:
+            func =  getattr(aklib, val[2].lower())
+            func(val[6])
+        except Exception as ex:
+            print ex
+            #'module' object has no attribute 'abcd'
+            raise Exception("no parser")           
             
         cmd = val[2]
         

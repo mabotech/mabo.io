@@ -1,12 +1,25 @@
+# -*- coding: utf-8 -*-
 
+"""
 
-#
+BEP
+MAHA
+HARIBA
+AVL
 
-def a1(data):
-    print ("aklib, func a1(), data: %s" % (data) )
+"""
+
+def avfi(data):
+    """
+    AVFI - Request actual speed and motor force
+    """
+    print ("data: %s" % (data) )
     
-def a2():
-    print ("func a2()")
+def aweg(data):
+    """
+    AWEG - Request the distance traveled 
+    """
+    print ("data: %s" % (data) )
 
 
 
