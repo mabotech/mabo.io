@@ -3,8 +3,6 @@
 *.exe
 *.dll
 
-
-
 # Logs
 #logs
 /logs
@@ -13,7 +11,48 @@
 
 *.zip
 
-*.pyc
+# python
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+*.ico
+
+# Distribution / packaging
+.Python
+env/
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+#lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Translations
+*.mo
+
+# Sphinx documentation
+docs/_build/
+
 
 # Runtime data
 pids

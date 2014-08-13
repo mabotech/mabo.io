@@ -19,6 +19,10 @@ channel_number = 0
 
 non_data_len = 10
 
+[redis]
+redis_host = "127.0.0.1"
+redis_port = 4357
+
 [logging]
 
 datetime_format = "local"
