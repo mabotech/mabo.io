@@ -21,6 +21,8 @@ non_data_len = 10
 
 [logging]
 
+datetime_format = "local"
 logfile = "ak_cli.log"
 max_size = 102400
 backup_count = 5
+

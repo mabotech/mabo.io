@@ -1,23 +1,24 @@
+# -*- coding: utf-8 -*-
 
-
-
+""" global conf """
 
 from mabopy.patterns.singleton import Singleton
 
 from utils import get_conf
 
 class Conf(object):
-    
+    """ conf """
     __metaclass__ = Singleton
     
-    def __init__(self):
+    def __init__(self, conf_file=""):
+        """ init conf """
         
-        conf = get_conf("ak_client.toml")
+        conf = get_conf(conf_file)
         
         for item in conf["client"]:
-            print item
+            #print item
             setattr(self, item, conf["client"][item])    
 
         for item in conf["logging"]:
-            print item
+            #print item
             setattr(self, item, conf["logging"][item])      

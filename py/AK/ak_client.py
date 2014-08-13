@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 """ 
 AK Client 
 AK Protocol
@@ -11,39 +10,27 @@ import socket
 import struct
 
 #import aklib
-import logbook
+
 import gevent
 
 from conf import Conf
 
-logbook.set_datetime_format("local")
+conf = Conf("ak_client.toml")
 
-logger = logbook.Logger('AKC')
+from local_logger import get_logger
+
+logger = get_logger('AKC')
 
 #log = logbook.FileHandler('heka_tcp.log')
 
 import aklib
 
 
-
 STX = 0x02
 ETX = 0x03
 BLANK = 0x20
-K = ord('K')
-    
-        
+K = ord('K')   
 
-conf = Conf()
-
-log = logbook.RotatingFileHandler(conf.logfile, max_size = conf.max_size, \
-                                    backup_count = conf.backup_count)
-
-log.push_application()
-
-class Logger(object):
-
-    def __init__(self):
-        pass
 
 class AKClient(object):
     
@@ -56,34 +43,14 @@ class AKClient(object):
     * AVL    
     """
 
-    def __init__(self):
-        
+    def __init__(self):        
         """ init """
         
-        #conf = get_conf("ak_client.toml")
-        
-        """
-        self.host = conf["client"]["host"]
-        self.port = conf["client"]["port"]
-        
-        self.ticker_interval = conf["client"]["ticker_interval"] 
-        
-        self.max_retry = conf["client"]["max_retry"]        
-        self.retry_interval = conf["client"]["retry_interval"]        
-        self.timeout = conf["client"]["timeout"]
-        
-        self.equipment = conf["client"]["equipment"]
-        self.channel_number = conf["client"]["channel_number"]
-        
-        self.non_data_len = conf["client"]["non_data_len"]
-        """
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
-    def connect(self):
-        
+    def connect(self):        
         """ connect """
-        try:
-            
+        try:         
             
             self.sock.connect((conf.host, conf.port))
             
@@ -91,27 +58,22 @@ class AKClient(object):
             print ex
             self.sock = None
             
-    def pack(self, cmd):
-        
-        """ pack """
-        
-        #cmd = "AVFI"
-      
+    def pack(self, cmd):        
+        """ pack """        
+        #cmd = "AVFI"      
         clen = len(cmd)
         fmt = "!2b%ds5b" % (clen)
-        print fmt
+        #print fmt
         buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, conf.channel_number, BLANK, ETX)
         print(buf)
         return buf
     
-    def send(self, buf):
-        
+    def send(self, buf):        
         """ send """
         
         self.sock.sendall(buf)
         
-    def recv(self):
-        
+    def recv(self):        
         """ recv """
         
         data = self.sock.recv(1024)
@@ -145,17 +107,14 @@ class AKClient(object):
         
         return cmd
         #print val
-        #print repr(val)
-        
+        #print repr(val)       
     
-    def close(self):
-        
+    def close(self):        
         """ close socket """
         
         self.sock.close()
  
-    def run(self):
-        
+    def run(self):        
         """ run """  
         
         connected = 0
@@ -212,6 +171,7 @@ class AKClient(object):
 
 def main():
     """ main """
+    
     logger.info("start AK client")
     
     ak_client = AKClient() 

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 """
 simulator for AK Server
 """
@@ -34,7 +33,8 @@ STX = 0x02
 ETX = 0x03
 BLANK = 0x20 # 
 
-def pack(cmd):
+def pack(cmd):    
+    """ pack """
     
     clen = len(cmd)
     
@@ -51,9 +51,9 @@ def pack(cmd):
     
     return buf
 
-def clientthread(conn):
-    
+def clientthread(conn):    
     """ client thread """
+    
     try:
         while True:
              
@@ -136,4 +136,5 @@ def main():
     sock.close()
     
 if __name__ == "__main__":
+    
     main()
