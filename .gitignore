@@ -17,6 +17,7 @@ __pycache__/
 *.py[cod]
 
 *.ico
+*.spec
 
 # Distribution / packaging
 .Python

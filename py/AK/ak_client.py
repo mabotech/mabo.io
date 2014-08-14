@@ -73,6 +73,18 @@ class AKClient(object):
         
         self.sock.sendall(buf)
         
+    def process(self, val):
+        """ process received data """
+        
+        try:
+            func =  getattr(aklib, val[2].lower())
+            func(val[6])
+        except Exception as ex:
+            logger.debug(ex)
+            #'module' object has no attribute 'abcd'
+            raise Exception("no parser")         
+        
+        
     def recv(self):        
         """ recv """
         
@@ -83,29 +95,29 @@ class AKClient(object):
         if dlen < 0:
             raise Exception("struct error")
             
-        print ( data )
+        logger.debug( data )
         
         fmt = "!2b4s3b%ds1b" % (dlen)
         
-        val = struct.unpack(fmt, data)
+        try:
+            val = struct.unpack(fmt, data)
+            
+            self.process(val)
+        except Exception as ex:
+            
+            logger.error(ex)
         
-        print(val)
+        #print(val)
         
-        msg = "Cmd:[%s],Error:[%s], Data:[%s]" % (val[2], val[4], val[6])
+        #msg = "Cmd:[%s],Error:[%s], Data:[%s]" % (val[2], val[4], val[6])
         
         #logger.debug ( msg )
         
-        try:
-            func =  getattr(aklib, val[2].lower())
-            func(val[6])
-        except Exception as ex:
-            print ex
-            #'module' object has no attribute 'abcd'
-            raise Exception("no parser")           
+          
             
-        cmd = val[2]
+        #cmd = val[2]
         
-        return cmd
+        #return cmd
         #print val
         #print repr(val)       
     

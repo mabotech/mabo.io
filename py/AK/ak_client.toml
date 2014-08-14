@@ -5,6 +5,8 @@
 host = "127.0.0.1"
 port = 6010
 
+cmd = "AVFI"
+
 ticker_interval = 3
 
 max_retry = 5
@@ -20,13 +22,20 @@ channel_number = 0
 non_data_len = 10
 
 [redis]
+
 redis_host = "127.0.0.1"
 redis_port = 4357
 
 [logging]
 
-datetime_format = "local"
 logfile = "ak_cli.log"
+
+level = "DEBUG"
+
+datetime_format = "local"
+
 max_size = 102400
 backup_count = 5
+
+
 
