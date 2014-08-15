@@ -10,12 +10,14 @@ def exception(Exception):
         pass
     
 
-def main():
+def query():
     
     # gevent timeout not work here
     
     result = None
+    
     print strftime("%Y-%m-%d %H:%M:%S", localtime())
+    
     with gevent.Timeout(1, False) as timeout: 
         
         
@@ -26,7 +28,7 @@ def main():
             cmdgen.CommunityData('public'),
             cmdgen.UdpTransportTarget(('demo.snmplabs.com', 161)),
             #cmdgen.UdpTransportTarget(('localhost', 161)),
-            '1.3.6.1.2.1.1.4.0'
+            '1.3.6.1.2.1.1.5.0'
         )
         print 
         print("===="*4)
@@ -38,5 +40,13 @@ def main():
         print "timeout"
     #finally:
     #    timeout.cancel()
+    
+def main():
+    
+    for i in xrange(0, 3):
+        query()
+        gevent.sleep(1)
+        
+    
 if __name__ == "__main__":
     main()
