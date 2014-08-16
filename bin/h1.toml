@@ -13,14 +13,47 @@ delimiter = ",|$"
 [client_log]
 type = "LogstreamerInput"
 rescan_interval  = "5s"
-log_directory = "E:\\mabodev\\mabo.io\\py\\heka"
-#file_match = 'heka_tcp.log'
-file_match = 'heka_tcp\.log\.?(?P<Seq>\d*)'
-priority = ["^Seq"]
+#log_directory = "E:\\mabodev\\mabo.io\\py\\heka"
+log_directory = "E:\\mabodev\\mabo.io\\bin"
+file_match = 'test1.log'
+#file_match = 'heka_tcp\.log\.?(?P<Seq>\d*)'
+#priority = ["^Seq"]
+
+
+###
+
+[AMQPOutput]
+url = "amqp://guest:guest@localhost:5672/"
+exchange = "testout"
+exchangeType = "fanout"
+ExchangeDurability  = true
+ExchangeAutoDelete  = true
+RoutingKey = "mabo"
+#"fanout"
+message_matcher = 'TRUE'
+encoder = "PayloadEncoder"
+
+[ESJsonEncoder]
+index = "%{Type}-%{2006.01.02}"
+es_index_from_timestamp = true
+type_name = "%{Type}"
+
+[AMQPOutput2]
+type = "AMQPOutput"
+url = "amqp://guest:guest@localhost:5672/"
+exchange = "heka"
+exchangeType = "topic"
+ExchangeDurability  = true
+ExchangeAutoDelete  = true
+RoutingKey = "hekaq"
+#"fanout"
+message_matcher = 'TRUE'
+encoder = "PayloadEncoder"
+
 
 [PayloadEncoder]
 append_newlines = true
-prefix_ts = true
+prefix_ts = false
 ts_format = "2006/01/02 3:04:05PM MST"
 
 [console_log]

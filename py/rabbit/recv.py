@@ -14,14 +14,14 @@ def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters(
             host='localhost'))
     channel = connection.channel()
-
-    channel.queue_declare(queue='hello')
+    
+    channel.queue_declare(queue='mabo')
 
     print ' [*] Waiting for messages. To exit press CTRL+C'
 
 
     channel.basic_consume(callback,
-                          queue='hello',
+                          queue='mabo',
                           no_ack=True)
 
     channel.start_consuming()

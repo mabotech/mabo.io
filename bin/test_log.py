@@ -1,5 +1,6 @@
 
 
+from time import time
 
 import logbook
 
@@ -10,14 +11,14 @@ import gevent
 
 logger = logbook.Logger('app')
 
-log = logbook.FileHandler('test.log')
+log = logbook.FileHandler('test1.log')
 
 log.push_application()
 
 
 while True:
     
-
-    logger.info("info")
-    
+    t = time()
+    logger.info("timestamp:[%s]" % (t))
+    print t
     gevent.sleep(3)
