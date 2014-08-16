@@ -11,28 +11,48 @@ import redis
 
 REDIS_MAX_CONNECTIONS = 100
 
+class DataPub(object):
+    
+    """ class """
+    
+    def __init__(self):
+        """ init """
+        
+        rpool = redis.ConnectionPool(host='localhost', port=6379, db=6, \
+                    max_connections=REDIS_MAX_CONNECTIONS)
+
+        self.rclient = redis.Redis(connection_pool=rpool) 
+
+    def heartbeat(self):
+        pass
+        
+    def enqueue(self):
+        """ enqueue """
+        t = time.time()
+
+        self.rclient.rpush("point:abc:def",t)
+
+        self.rclient.rpush("point:abc",t)
+
+        d = {"point:abc:timestamp":t}
+
+        self.rclient.mset(d)
+
+        self.rclient.mset({"point:abc:pstate":t})
+        
+        self.rclient.mset({"point:abc:heartbeat":t})
+        
+        self.rclient.mset({"point:abc:client":"F123-10065"})
+
+        self.rclient.publish("point:abc","ok")
+
 def main():
     
-    rpool = redis.ConnectionPool(host='localhost', port=6379, db=6, \
-                max_connections=REDIS_MAX_CONNECTIONS)
+    publisher = DataPub()
+    
+    publisher.enqueue()
+    
 
-    rclient = redis.Redis(connection_pool=rpool) 
-
-
-    t = time.time()
-
-    rclient.rpush("point:abc:def",t)
-
-
-    rclient.rpush("point:abc",t)
-
-    d = {"point:abc:timestamp":t}
-
-    rclient.mset(d)
-
-    rclient.mset({"point:abc:pstate":t})
-
-    rclient.publish("point:abc","ok")
     
 if __name__ == '__main__':
     main()

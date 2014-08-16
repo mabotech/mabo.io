@@ -1,0 +1,17 @@
+
+[app]
+instance = "r1"
+host = "127.0.0.1"
+service_name = "redis_client"
+service_desc = "Redis Client"
+
+[redis]
+host = "127.0.0.1"
+port = 6379
+db = 6
+max_connections = 100
+
+[logging]
+logfile = "redis_client.log"
+
+
