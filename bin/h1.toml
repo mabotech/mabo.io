@@ -59,7 +59,7 @@ ts_format = "2006/01/02 3:04:05PM MST"
 [console_log]
 type = "LogOutput"
 message_matcher = "TRUE"
-encoder = "PayloadEncoder"
+encoder = "ESJsonEncoder"
 
 [log_file]
 type = "FileOutput"
