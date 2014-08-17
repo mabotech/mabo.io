@@ -15,7 +15,7 @@ type = "LogstreamerInput"
 rescan_interval  = "5s"
 #log_directory = "E:\\mabodev\\mabo.io\\py\\heka"
 log_directory = "E:\\mabodev\\mabo.io\\bin"
-file_match = 'test1.log'
+file_match = 'test_debug.log'
 #file_match = 'heka_tcp\.log\.?(?P<Seq>\d*)'
 #priority = ["^Seq"]
 
@@ -25,10 +25,10 @@ file_match = 'test1.log'
 [AMQPOutput]
 url = "amqp://guest:guest@localhost:5672/"
 exchange = "testout"
-exchangeType = "fanout"
-ExchangeDurability  = true
-ExchangeAutoDelete  = true
-RoutingKey = "mabo"
+exchange_type  = "fanout"
+exchange_durability   = true
+exchange_auto_delete   = true
+routing_key  = "mabo"
 #"fanout"
 message_matcher = 'TRUE'
 encoder = "PayloadEncoder"
@@ -42,10 +42,10 @@ type_name = "%{Type}"
 type = "AMQPOutput"
 url = "amqp://guest:guest@localhost:5672/"
 exchange = "heka"
-exchangeType = "topic"
-ExchangeDurability  = true
-ExchangeAutoDelete  = true
-RoutingKey = "hekaq"
+exchange_type  = "topic"
+exchange_durability   = true
+exchange_auto_delete   = true
+routing_key  = "hekaq"
 #"fanout"
 message_matcher = 'TRUE'
 encoder = "PayloadEncoder"

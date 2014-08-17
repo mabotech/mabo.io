@@ -21,9 +21,10 @@ def main():
     channel.exchange_declare(exchange='testout',
                              type='fanout')
 
-    result = channel.queue_declare(queue="hekaq")
+    
     queue_name = result.method.queue
     """
+    result = channel.queue_declare(queue="hekaq")
     #channel.queue_declare(queue="hekaq")
     channel.queue_bind(exchange='heka',
                        queue="hekaq")

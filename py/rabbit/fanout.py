@@ -24,6 +24,8 @@ def main():
     result = channel.queue_declare(exclusive=True)
     queue_name = result.method.queue
     """
+    result = channel.queue_declare(queue="mabo")
+    
     channel.queue_bind(exchange='testout',
                        queue="mabo")
 
