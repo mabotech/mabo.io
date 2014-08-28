@@ -93,10 +93,10 @@ async.series([
    function(callback){
        
        the_subscription=new opcua.ClientSubscription(the_session,{
-    requestedPublishingInterval: 1000,
-    requestedLifetimeCount: 10,
-    requestedMaxKeepAliveCount: 2,
-    maxNotificationsPerPublish: 10,
+    requestedPublishingInterval: 100,
+    requestedLifetimeCount: 60,
+    requestedMaxKeepAliveCount: 20,
+    maxNotificationsPerPublish: 20,
     publishingEnabled: true,
     priority: 10
 });
@@ -111,11 +111,28 @@ the_subscription.on("started",function(){
 
 setTimeout(function(){
     the_subscription.terminate();
-},10000);
+},1000000);
 
 // install monitored item
+console.log("-------------------------------------");
 var monitoredItem  = the_subscription.monitor({
-    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.MT"),
+    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.test"),
+    attributeId: 13
+},
+{
+    samplingInterval: 100,
+    discardOldest: false,
+    queueSize: 10
+});
+
+
+monitoredItem.on("changed",function(dataValue){
+   console.log(" test = ",dataValue.value.value);
+});
+
+
+var monitoredItem2  = the_subscription.monitor({
+    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.Tag2"),
     attributeId: 13
 },
 {
@@ -123,12 +140,11 @@ var monitoredItem  = the_subscription.monitor({
     discardOldest: true,
     queueSize: 10
 });
-console.log("-------------------------------------");
 
-monitoredItem.on("changed",function(dataValue){
-   console.log(" % free mem = ",dataValue.value.value);
+
+monitoredItem2.on("changed",function(dataValue){
+   console.log(" Tag2 = ",dataValue.value.value);
 });
-
 
        
        /*
