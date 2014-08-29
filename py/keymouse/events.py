@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+"""
+user input hook
+"""
 
 import pythoncom
 import pyHook
@@ -10,52 +13,59 @@ class Hook(object):
     def __init__(self):
         """ init """
         
-        self.fh = open("keyboard.dat", "wb")
+        #self.fh = open("keyboard.dat", "wb")
+        
+        self.WindowName = None
         
         pass
  
     def onMouseEvent(self, event):
         # 监听鼠标事件
         #print dir(event)
-        print "MessageName:", event.MessageName
-        print "Message:", event.Message
+        #print "MessageName:", event.MessageName
+        #print "Message:", event.Message
         #print "Time:", event.Time
         #print "Window:", event.Window
         #print "WindowName:", event.WindowName
-        print "Position:", event.Position
+        #print "Position:", event.Position
         #print "Wheel:", event.Wheel
         #print "Injected:", event.Injected
         #self.fh.write("1")
-        print "---"
+        #print "---"
      
         return True
      
     def onKeyboardEvent(self, event):
-        # 监听键盘事件
+        # 监听键盘事件abcdefghi
         #print dir(event)
-        print "MessageName:", event.MessageName
-        print "Message:", event.Message
-        print "Time:", event.Time
-        print "Window:", event.Window
-        print "WindowName:", event.WindowName
-        print "Ascii:", event.Ascii, chr(event.Ascii)
-        print "Key:", event.Key
-        print "KeyID:", event.KeyID
-        print "ScanCode:", event.ScanCode
-        print "Extended:", event.Extended
-        print "Injected:", event.Injected
-        print "Alt", event.Alt
-        print "Transition", event.Transition
-        print "---"
+        ### print "MessageName:", event.MessageName
+        ### print "Message:", event.Message
+        ### print "Time:", event.Time
+        ### print "Window:", event.Window
         
-        try:
-            print "write"
-            self.fh.write(chr(event.Ascii))
-            #self.fh.write(event.Key)
-            self.fh.flush()
-        except:
-            print "exc"
-            #123
+        if self.WindowName != event.WindowName:
+            self.WindowName = event.WindowName
+            print "WindowName:", event.WindowName
+        
+        msg = "%s" % repr(chr(event.Ascii))
+        print msg,
+        ### print "Key:", event.Key
+        ### print "KeyID:", event.KeyID
+        ### print "ScanCode:", event.ScanCode
+        ### print "Extended:", event.Extended
+        ### print "Injected:", event.Injected
+        ### print "Alt", event.Alt
+        ### print "Transition", event.Transition
+        ### print "---"
+        
+        ### #try:
+            ### print "write"
+            ### self.fh.write(chr(event.Ascii))
+            ### #self.fh.write(event.Key)
+            ### self.fh.flush()
+        ### except:
+            ### print "exc"
+            ### #123
      
         # 同鼠标事件监听函数的返回值
         return True

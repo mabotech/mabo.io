@@ -1,0 +1,7 @@
+
+
+[app]
+
+dir = "testDir"
+
+target = "abc def"
