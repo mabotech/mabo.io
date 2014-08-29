@@ -12,7 +12,7 @@ def main():
     
     while True:
 
-        fn = "f%s.txt" % (strftime("%Y_%m_%d_%H_%M_%S", localtime()))
+        fn = "f%s.dat" % (strftime("%Y_%m_%d_%H_%M_%S", localtime()))
         fh = open(fn, "w")
         for i in xrange(1,10):
             fh.write("OK[%s]" % (i))
