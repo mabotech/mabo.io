@@ -3,6 +3,9 @@
 *.exe
 *.dll
 
+*.csv
+*.xlsx
+
 # Logs
 #logs
 /logs

@@ -4,6 +4,9 @@ import (
 	"github.com/BurntSushi/toml"
 	"gopkg.in/fsnotify.v1"
 	"log"
+	"time"
+	
+	
 	//"github.com/howeyc/fsnotify"
 )
 
@@ -33,12 +36,26 @@ func main() {
 
 	// Process events
 	go func() {
+	
+	
+	
 		for {
+			//timeout := time.After(1)
 			select {
-			case ev := <-watcher.Events:
-				log.Println("event:", ev)
+			
+
+			case event := <-watcher.Events:
+				log.Println("event:", event)
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					log.Println("modified file:", event.Name)
+				}
 			case err := <-watcher.Errors:
 				log.Println("error:", err)
+				
+				
+			case <-time.After(time.Second * 2):
+				log.Println("heartbeat")				
+				
 			}
 		}
 	}()
