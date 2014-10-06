@@ -1,0 +1,5 @@
+
+STX = 0x02
+ETX = 0x03
+BLANK = 0x20
+K = ord('K') 

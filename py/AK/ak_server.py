@@ -21,7 +21,7 @@ from utils import get_conf
 
 logbook.set_datetime_format("local")
 
-logger = logbook.Logger('AKS')
+logger = logbook.Logger('AKSrv')
 
 #log = logbook.FileHandler('heka_tcp.log')
 
@@ -29,6 +29,7 @@ log = logbook.RotatingFileHandler('ak_srv.log', max_size=10240, backup_count=5)
 
 log.push_application()
 
+# static
 STX = 0x02
 ETX = 0x03
 BLANK = 0x20 # 

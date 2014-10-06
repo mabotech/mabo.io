@@ -19,13 +19,13 @@ conf = Conf("ak_client.toml")
 
 from local_logger import get_logger
 
-logger = get_logger('AKC')
+logger = get_logger('AKCli')
 
 #log = logbook.FileHandler('heka_tcp.log')
 
 import aklib
 
-
+# static
 STX = 0x02
 ETX = 0x03
 BLANK = 0x20

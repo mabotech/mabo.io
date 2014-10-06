@@ -19,6 +19,11 @@ def aweg(data):
     """
     AWEG - Request the distance traveled 
     """
+    
+    # business logic here
+    # compare with history data in redis
+    # get equipment status and send to heka
+    
     print ("data: %s" % (data) )
 
 
