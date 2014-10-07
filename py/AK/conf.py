@@ -11,7 +11,9 @@ class Conf(object):
     __metaclass__ = Singleton
     
     def __init__(self, conf_file=""):
-        """ init conf """
+        """ init conf 
+            TODO: flat to 'ins.attr'
+        """
         
         conf = get_conf(conf_file)
         

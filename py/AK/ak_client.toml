@@ -7,6 +7,10 @@ port = 6010
 
 cmd = "AVFI"
 
+cmd_seq = ["AVFI","AVFI"]
+
+seq_interval = 3
+
 ticker_interval = 3
 
 max_retry = 5
@@ -17,6 +21,7 @@ timeout = 10
 #BEP,  MAHA, HORIBA, AVL
 
 equipment = "BEP"
+
 channel_number = 0
 
 non_data_len = 10
