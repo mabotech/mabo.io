@@ -4,9 +4,16 @@ import redis
 
 import time
 
+
+r = redis.Redis(host='localhost', port=6379, db=4)     
+
+def post(sha, tag, val):
+    t = time.time() * 1000
+    v = r.evalsha(sha, 1, tag, val, t)
+    print(v)
+
 def main(filename):
-    # connection pool
-    r = redis.Redis(host='localhost', port=6379, db=4)     
+    # connection pool    
     
     with open(filename,"r") as fh:
         lua_code = fh.read()
@@ -14,11 +21,15 @@ def main(filename):
     #print lua_code
     t = time.time() * 1000
     
-    v = r.eval(lua_code, 1, "tag.x","abc", t)
+    v = r.eval(lua_code, 1, "dev.tag","val", t)
     print(v)
     #time.sleep(2)
-    v = r.eval(lua_code, 1, "tag.x","ok", t)
-    print(v)
+    
+    
+    sha =r.script_load(lua_code)
+    #print (sha)
+    post(sha, "dev.tag","data")
+    
     
 if __name__ == "__main__":
     

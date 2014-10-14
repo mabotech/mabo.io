@@ -10,8 +10,8 @@ r = redis.Redis(host='localhost', port=6379, db=4)
 def post(tag):
     
     val = r.hget(tag, "val")
-    
-    print(val)
+    timestamp = r.hget(tag, "timestamp")
+    print("%s, %s-%s" % (tag, timestamp,val) )
     
 
 def main():
