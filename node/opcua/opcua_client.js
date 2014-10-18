@@ -8,6 +8,11 @@ var client = new opcua.OPCUAClient();
 var endpointUrl = "opc.tcp://127.0.0.1:49380";
 
 var the_session = null;
+
+var hb = Math.floor(new Date() / 1000)
+
+function main(){
+
 async.series([
 
 
@@ -104,7 +109,11 @@ async.series([
 the_subscription.on("started",function(){
     console.log("subscription started for 2 seconds - subscriptionId=",the_subscription.subscriptionId);
 }).on("keepalive",function(){
+    
+    hb = Math.floor(new Date() / 1000)
     console.log("keepalive");
+    
+    
 }).on("terminated",function(){
     callback();
 });
@@ -216,5 +225,36 @@ monitoredItem.on("changed",function(dataValue){
     console.log("done!")
   }
   // disconnect regardless
-  client.disconnect(function(){});
+  client.disconnect(function(){
+      
+    console.log("disconnect")
+      
+      });
 }) ;
+
+} // end main
+
+main()
+
+var retry = 0
+
+function loop(){
+
+    setTimeout(function(){
+        
+        var now = Math.floor(new Date() / 1000)
+        
+        if (now - hb > 6){
+            hb = Math.floor(new Date() / 1000) // consider connection time
+            console.log("disconnected")   
+            main()
+        }  else{
+            console.log("ok")   
+            
+            }          
+        loop()
+    },2000);
+
+} // end loop
+
+loop()
