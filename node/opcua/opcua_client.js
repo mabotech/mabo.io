@@ -1,5 +1,30 @@
+
+/*
+* opc ua client
+*/
+var nconf = require('nconf');
+var winston = require('winston');
+
 var opcua = require("node-opcua");
 var async = require("async");
+
+
+var logger = winston.loggers.add('server', {
+    console: {
+        //silent:true,
+        level: 'debug',
+        colorize: 'true',
+        label: 'server'
+    },
+    file: {
+        filename: 'logs/client.log',
+        label: 'client',
+        level: 'debug',
+        json: false,
+        maxsize: 10240000,
+        maxFiles: 10
+    }
+});
 
 var client = new opcua.OPCUAClient();
 
@@ -247,8 +272,12 @@ function loop(){
         if (now - hb > 6){
             hb = Math.floor(new Date() / 1000) // consider connection time
             console.log("disconnected")   
+            logger.debug('disconnected, '+hb);
+            //reconnect
+            
             main()
         }  else{
+            
             console.log("ok")   
             
             }          
