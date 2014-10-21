@@ -4,24 +4,33 @@ import redis
 
 import time
 
+# TODO： connection pool and exception handling
+r = redis.Redis(host='localhost', port=6379, db=4)    
 
-r = redis.Redis(host='localhost', port=6379, db=4)     
+# TODO: alert
+# send alert to heka( http post? )
 
+#print dir(r)
+print (r.info())
 def post(sha, tag, val):
     t = time.time() * 1000
+    
+    # eval lua script
     v = r.evalsha(sha, 1, tag, val, t)
     print(v)
 
-def main(filename):
-    # connection pool    
+def main(lua_file):
     
-    with open(filename,"r") as fh:
+    
+    with open(lua_file,"r") as fh:
         lua_code = fh.read()
         
     #print lua_code
     t = time.time() * 1000
     
+    # eval lua script
     v = r.eval(lua_code, 1, "dev.tag","val", t)
+    
     print(v)
     #time.sleep(2)
     
@@ -33,7 +42,7 @@ def main(filename):
     
 if __name__ == "__main__":
     
-    filename = "polling.lua"
+    lua_file = "polling.lua"
     
-    main(filename)    
+    main(lua_file)    
     
