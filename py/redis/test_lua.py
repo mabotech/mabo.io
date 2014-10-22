@@ -8,7 +8,7 @@ import time
 r = redis.Redis(host='localhost', port=6379, db=4)    
 
 # TODO: alert
-# send alert to heka( http post? )
+# send alert to heka( http post? ) or directly to influxdb? (timeline)
 
 #print dir(r)
 print (r.info())
