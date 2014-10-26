@@ -1,5 +1,9 @@
 
+
+import time
 from time import strftime, localtime
+
+import socket
 import gevent
 
 from pysnmp.entity.rfc3413.oneliner import cmdgen
@@ -10,9 +14,11 @@ def exception(Exception):
         pass
     
 
-def query():
+def query(node):
     
     # gevent timeout not work here
+    
+    start = time.time()
     
     result = None
     
@@ -35,16 +41,23 @@ def query():
         result ='\n'.join([ '%s = %s' % varBind for varBind in varBinds])
     
     if result != None:
-        print result
+        print("seq:%s, result:[%s]" % (node,result ))
     else:
         print "timeout"
     #finally:
     #    timeout.cancel()
     
+    return time.time() - start
+    
 def main():
     
-    for i in xrange(0, 3):
-        query()
+    
+    while True:
+    
+        for i in xrange(0, 3):
+            duration = query(i)
+            print "%s" %(duration)
+        
         gevent.sleep(1)
         
     
