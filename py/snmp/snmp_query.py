@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 import time
 from time import strftime, localtime
@@ -13,9 +13,20 @@ def exception(Exception):
     def __init__(self):
         pass
     
+# def getValue():
+
+# def getData():
+
+# thread pool, gevent
+
+
+
+
 
 def query(node):
-    
+    """
+    return value, elapsed time
+    """
     # gevent timeout not work here
     
     start = time.time()
@@ -49,7 +60,7 @@ def query(node):
     
     return time.time() - start
     
-def main():
+def mainloop():
     
     
     while True:
@@ -62,4 +73,4 @@ def main():
         
     
 if __name__ == "__main__":
-    main()
+    mainloop()

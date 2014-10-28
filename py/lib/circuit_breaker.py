@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 """
 
@@ -29,6 +29,8 @@ class CircuitBreaker(object):
         self._fail_max = 0
         
         self._lock = threading.RLock()   
+        #acquire()
+        #release()
 
         pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
         self.redisc = redis.Redis(connection_pool=pool)
@@ -36,7 +38,10 @@ class CircuitBreaker(object):
 
     def restart_req(self):
         """ send restart request to job queue"""
-        pass
+        
+        with self._lock:
+        
+            pass
         
     
     def check_redis(self):

@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 
 import sys
+
+#
 sys.setrecursionlimit(40)
 
 import time
@@ -93,6 +96,8 @@ def loop():
                 
                 for i in xrange(3):
                     
+                    #test cb
+                    #if circuit_breaker.broken == True: 
                     pool.spawn(query, j, i) 
                     
                 #pool.join()
