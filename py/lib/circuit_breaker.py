@@ -25,7 +25,10 @@ class CircuitBreaker(object):
     """  Circuit Breaker Pattern """
     
     def __init__(self):
+        """   """
         
+        self.broken = False
+        self.instance_name = "name"
         self._fail_max = 0
         
         self._lock = threading.RLock()   
@@ -35,39 +38,46 @@ class CircuitBreaker(object):
         pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
         self.redisc = redis.Redis(connection_pool=pool)
 
-
+    def reconnect_redis():
+        """ reconnect redis"""
+        pass
+        
     def restart_req(self):
         """ send restart request to job queue"""
         
-        with self._lock:
-        
+        with self._lock:        
             pass
         
     
-    def check_redis(self):
-        """
-        check if redis is available
-        """
+    def test_redis(self):
+        """ test if redis is available """        
         
-        
-        pass
+        return True
 
     def register(self, status):
-        """ register connection"""
+        """ register connection """
+        
         pass
 
     def check_status(self):
-        """ check connection(circuit) status"""       
+        """ check connection(circuit) status """
         
+        if self.test_redis() = True:
+            pass
+        else:
+            reconnect_redis()
+            pass
         pass
             
            
     def connect(self):
         """ connect """
+        
         self.register('C')
 
     def reconnect(self):
         """ reconnect """
+        
         self.register('R')
         
         self.register('C')
@@ -75,21 +85,20 @@ class CircuitBreaker(object):
         self.register('F')
         
 
-    def read(self):
-        
+    def read(self):        
         """ read """
         
         status = self.check_status()
         
         if status == 'C':
+            self.broken = False
             pass
-
-
+            
     def write(self):
         """ write """
+        
         pass
-    
-    
+        
     
 def main():
     """ main """

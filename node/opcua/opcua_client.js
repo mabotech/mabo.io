@@ -26,11 +26,19 @@ var logger = winston.loggers.add('server', {
     }
 });
 
+nconf.file('config.json');
+
+var port = nconf.get("server").port
+
+console.log(port)
+
 var client = new opcua.OPCUAClient();
 
 //var sub1 = opcua.ClientSubscription();
 
-var endpointUrl = "opc.tcp://127.0.0.1:49380";
+//var endpointUrl = "opc.tcp://127.0.0.1:49380";
+
+var endpointUrl = nconf.get("server").endpointUrl
 
 var the_session = null;
 
@@ -263,6 +271,8 @@ main()
 
 var retry = 0
 
+var INTERVAL = 500
+
 function loop(){
 
     setTimeout(function(){
@@ -282,7 +292,7 @@ function loop(){
             
             }          
         loop()
-    },2000);
+    }, INTERVAL);
 
 } // end loop
 
