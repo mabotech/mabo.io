@@ -16,6 +16,15 @@
 
     },
     
+    "logging":{
+        "filename": "logs/client1.log",
+        "label": "client",
+        "level": "debug",
+        "json": false,
+        "maxsize": 10240000,
+        "maxFiles": 10
+    },
+    
     "redis":{
         "host":"localhost"
     },

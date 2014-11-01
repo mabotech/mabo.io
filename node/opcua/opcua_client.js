@@ -8,7 +8,9 @@ var winston = require('winston');
 var opcua = require("node-opcua");
 var async = require("async");
 
+nconf.file('config.json');
 
+console.log( nconf.get("logging"))
 var logger = winston.loggers.add('server', {
     console: {
         //silent:true,
@@ -16,7 +18,12 @@ var logger = winston.loggers.add('server', {
         colorize: 'true',
         label: 'server'
     },
-    file: {
+    file: nconf.get("logging")
+});
+
+//logger.debug("debug")
+/*
+{
         filename: 'logs/client.log',
         label: 'client',
         level: 'debug',
@@ -24,21 +31,21 @@ var logger = winston.loggers.add('server', {
         maxsize: 10240000,
         maxFiles: 10
     }
-});
+*/
 
-nconf.file('config.json');
+
 
 var port = nconf.get("server").port
-
 console.log(port)
+//var endpointUrl = "opc.tcp://127.0.0.1:49380";
+var endpointUrl = nconf.get("server").endpointUrl
+
 
 var client = new opcua.OPCUAClient();
 
 //var sub1 = opcua.ClientSubscription();
 
-//var endpointUrl = "opc.tcp://127.0.0.1:49380";
 
-var endpointUrl = nconf.get("server").endpointUrl
 
 var the_session = null;
 
