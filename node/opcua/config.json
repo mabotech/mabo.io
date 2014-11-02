@@ -12,7 +12,9 @@
         }, {
             "tag": "ns=2;s=Channel1.Device1.Tag2",
             "queues": [{"1":"t2"},{"2":"t3"},{"*":"log"}]
-        }]
+        }],
+        
+        "tag_array":["ns=2;s=Channel1.Device1.test","ns=2;s=Channel1.Device1.Tag1"]
 
     },
     

@@ -108,21 +108,24 @@ async.series([
      });
    },
   
-   // step 4 : read a variable
-
- 
+   
+   // step 4 : read a variable 
    function(callback) {
     
-     the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
+    the_session.readVariableValue(nconf.get("server").tag_array, function(err,dataValues,diagnostics) {
+    //the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
        if (!err) {
+        console.log("dataValues: ");
         console.log(dataValues);
-         console.log(" Channel1.Device1.MT = " , dataValues[0].value.value);
-         console.log(" Channel1.Device1.Tag1 = " , dataValues[1].value.value);
+        // console.log(" Channel1.Device1.MT = " , dataValues[0].value.value);
+        // console.log(" Channel1.Device1.Tag1 = " , dataValues[1].value.value);
        }
 
        callback(err);
      })
    },
+   
+   
 /*
    function(callback){
 
@@ -158,14 +161,16 @@ the_subscription.on("started",function(){
     callback();
 });
 
+/*
 setTimeout(function(){
     the_subscription.terminate();
 },1000000);
+*/
 
 // install monitored item
 console.log("-------------------------------------");
 var monitoredItem  = the_subscription.monitor({
-    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.test"),
+    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.MT"),
     attributeId: 13
 },
 {
@@ -176,7 +181,7 @@ var monitoredItem  = the_subscription.monitor({
 
 
 monitoredItem.on("changed",function(dataValue){
-   console.log(" test = ",dataValue.value.value);
+   console.log(" MT = ",dataValue.value.value);
 });
 
 
@@ -304,3 +309,6 @@ function loop(){
 } // end loop
 
 loop()
+
+//TODO: reload config,   tag or lisenter?
+// polling or subscription ?
