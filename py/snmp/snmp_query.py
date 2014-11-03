@@ -6,6 +6,9 @@ from time import strftime, localtime
 import socket
 import gevent
 
+
+#toml or json configuration
+
 from pysnmp.entity.rfc3413.oneliner import cmdgen
 
 def exception(Exception):
@@ -62,14 +65,21 @@ def query(node):
     
 def mainloop():
     
+    INTERVAL = 1 #second
     
     while True:
     
         for i in xrange(0, 3):
+            
+            #gevent pool and threads count
+            
+            #spawn / timeout
             duration = query(i)
+            
             print "%s" %(duration)
         
-        gevent.sleep(1)
+        # loop interval
+        gevent.sleep(INTERVAL)
         
     
 if __name__ == "__main__":
