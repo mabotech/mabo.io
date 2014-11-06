@@ -1,4 +1,11 @@
 
+
+/*
+
+npm install node-opcua
+
+*/
+
 /*
 * opc ua client
 */
@@ -311,4 +318,5 @@ function loop(){
 loop()
 
 //TODO: reload config,   tag or lisenter?
+// writer
 // polling or subscription ?
