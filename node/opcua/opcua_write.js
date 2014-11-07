@@ -13,6 +13,8 @@ var nconf = require('nconf');
 var winston = require('winston');
 
 var opcua = require("node-opcua");
+
+
 var async = require("async");
 
 nconf.file('config.json');
@@ -193,7 +195,7 @@ monitoredItem.on("changed",function(dataValue){
 
 
 var monitoredItem2  = the_subscription.monitor({
-    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.Tag1"),
+    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.Tag2"),
     attributeId: 13
 },
 {
@@ -204,7 +206,7 @@ var monitoredItem2  = the_subscription.monitor({
 
 
 monitoredItem2.on("changed",function(dataValue){
-   console.log(" Tag1 = ",dataValue.value.value);
+   console.log(" Tag2 = ",dataValue.value.value);
 });
 
        
@@ -301,14 +303,44 @@ function loop(){
         vWord1 = vWord1 + 1
         
         try{
-            the_session.writeSingleNode("ns=2;s=Channel1.Device1.Tag1",
+            //writeSingleNode
+            the_session.writeSingleNode("ns=2;s=Channel1.Device1.Tag2",
                 { dataType: "UInt16", value: vWord1 },   // UInt16 - Word (Kepware)
                 function(err, statusCodes, diagnosticInfos){
                     console.log(statusCodes);
             });
         }catch(err){
-            
-            }
+              console.log(err)
+        }
+         
+        
+        try{
+            //write
+            the_session.write([                
+                {
+                    nodeId:"ns=2;s=Channel1.Device1.MT",
+                    attributeId:opcua.read_service.AttributeIds.Value,
+                    indexRange: null,
+                    value: {value:  { dataType: "UInt16", value: vWord1 }}
+                
+                    }    ,
+
+       {
+                    nodeId:"ns=2;s=Channel1.Device1.Tag2",
+                    attributeId:opcua.read_service.AttributeIds.Value,
+                    indexRange: null,
+                    value: {value:  { dataType: "UInt16", value: vWord1 }}
+                
+                    }  
+
+                    
+                ],   // UInt16 - Word (Kepware)
+                function(err, statusCodes, diagnosticInfos){
+                    console.log(statusCodes);
+            });
+        }catch(err){
+            console.log(err)
+        }
         
         var now = Math.floor(new Date() / 1000)
         
