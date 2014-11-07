@@ -321,20 +321,15 @@ function loop(){
                     nodeId:"ns=2;s=Channel1.Device1.MT",
                     attributeId:opcua.read_service.AttributeIds.Value,
                     indexRange: null,
-                    value: {value:  { dataType: "UInt16", value: vWord1 }}
-                
-                    }    ,
-
-       {
+                    value: {value:  { dataType: "UInt16", value: vWord1 }}                
+                    } ,
+                {
                     nodeId:"ns=2;s=Channel1.Device1.Tag2",
                     attributeId:opcua.read_service.AttributeIds.Value,
                     indexRange: null,
-                    value: {value:  { dataType: "UInt16", value: vWord1 }}
-                
-                    }  
-
-                    
-                ],   // UInt16 - Word (Kepware)
+                    value: {value:  { dataType: "UInt16", value: vWord1 }}                
+                    }                    
+                ],  
                 function(err, statusCodes, diagnosticInfos){
                     console.log(statusCodes);
             });
