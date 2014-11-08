@@ -10,13 +10,13 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git://github.com/mabotech/maboiot.git"
+        "url": "git://github.com/mabotech/mabo.io.git"
     },
     "scripts": {
         "start": "node --harmony server.js"
     },
     "engines": {
-        "node": ">= 0.11.9"
+        "node": ">= 0.11.14"
     },
     "files": [
         "index.js"

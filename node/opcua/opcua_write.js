@@ -202,10 +202,14 @@ var monitoredItem2  = the_subscription.monitor({
     samplingInterval: 100,
     discardOldest: true,
     queueSize: 10
-});
+},
+opcua.read_service.TimestampsToReturn.Both // get  sourceTimestamp & serverTimestamp
+);
 
 
 monitoredItem2.on("changed",function(dataValue){
+    console.log(dataValue.sourceTimestamp.getTime())
+     console.log(dataValue.serverTimestamp.getTime())
    console.log(" Tag2 = ",dataValue.value.value);
 });
 
@@ -294,7 +298,7 @@ var retry = 0
 
 var vWord1 = 0
 
-var INTERVAL = 500
+var INTERVAL = 1500
 
 function loop(){
 
@@ -331,6 +335,7 @@ function loop(){
                     }                    
                 ],  
                 function(err, statusCodes, diagnosticInfos){
+                    console.log(new Date().getTime() )
                     console.log(statusCodes);
             });
         }catch(err){

@@ -11,7 +11,7 @@
 - Heart beat & server recovery
 
 
-#Recipes
+# Usage
 
 ## Read
 
