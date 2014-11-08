@@ -186,10 +186,14 @@ var monitoredItem  = the_subscription.monitor({
     samplingInterval: 100,
     discardOldest: false,
     queueSize: 10
-});
+},
+opcua.read_service.TimestampsToReturn.Both // get  sourceTimestamp & serverTimestamp
+);
 
 
 monitoredItem.on("changed",function(dataValue){
+   console.log("Read dataValue.sourceTimestamp:"+dataValue.sourceTimestamp.getTime())
+   console.log("Read dataValue.serverTimestamp:"+dataValue.serverTimestamp.getTime())
    console.log(" MT = ",dataValue.value.value);
 });
 
@@ -208,9 +212,9 @@ opcua.read_service.TimestampsToReturn.Both // get  sourceTimestamp & serverTimes
 
 
 monitoredItem2.on("changed",function(dataValue){
-    console.log(dataValue.sourceTimestamp.getTime())
-     console.log(dataValue.serverTimestamp.getTime())
-   console.log(" Tag2 = ",dataValue.value.value);
+    console.log("Read dataValue.sourceTimestamp:"+dataValue.sourceTimestamp.getTime())
+    console.log("Read dataValue.serverTimestamp:"+dataValue.serverTimestamp.getTime())
+    logger.debug(" Tag2 = ",dataValue.value.value);
 });
 
        
@@ -298,7 +302,7 @@ var retry = 0
 
 var vWord1 = 0
 
-var INTERVAL = 1500
+var INTERVAL = 100
 
 function loop(){
 
@@ -335,7 +339,8 @@ function loop(){
                     }                    
                 ],  
                 function(err, statusCodes, diagnosticInfos){
-                    console.log(new Date().getTime() )
+                    console.log("write:"+vWord1)
+                    console.log("write:"+new Date().getTime() )
                     console.log(statusCodes);
             });
         }catch(err){

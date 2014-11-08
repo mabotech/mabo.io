@@ -1,5 +1,5 @@
 {
-    "name": "maboiot opcua",
+    "name": "opcua.io",
     "description": "mabo iot opcua",
     "version": "0.0.1",
     "keywords": [
@@ -24,7 +24,7 @@
     "devDependencies": {
         "debug": "debug",
         "mocha": "*",
-        "should": "*",
+        "should": "*"
     },
     "license": "MIT",
     "dependencies": {
