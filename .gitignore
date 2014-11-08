@@ -3,6 +3,8 @@
 *.exe
 *.dll
 
+*.der
+
 *.csv
 *.xlsx
 
