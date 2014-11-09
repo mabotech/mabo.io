@@ -6,6 +6,8 @@ node opcua client
 
 ## Design
 
+one client for each OPC server.
+
 ### circuit breaker
 
 CircuitBreaker
