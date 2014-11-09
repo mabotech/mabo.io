@@ -1,0 +1,45 @@
+{
+
+    "server": {
+
+        "port": 62268,
+        
+        "name":"TopServer",
+        
+        "endpointUrl": "opc.tcp://127.0.0.1:49380",
+
+        "tags1": [{
+            "tag": "ns=2;s=Channel1.Device1.test",
+            "queues": [{"1":"mt2"},{"2":"mt1"},{"*":"log"}]
+        }, {
+            "tag": "ns=2;s=Channel1.Device1.Tag2",
+            "queues": [{"1":"t2"},{"2":"t3"},{"*":"log"}]
+        }],
+        
+        "tag_array":["ns=2;s=Channel1.Device1.test","ns=2;s=Channel1.Device1.Tag1"],
+        
+        "tags":[
+            {"id":"ns=2;s=Channel1.Device1.test", "type":"UInt32"},
+            {"id":"ns=2;s=Channel1.Device1.Tag1", "type":"UInt32"}       
+        ]
+    },
+    
+    "logging":{
+        "filename": "logs/client1.log",
+        "label": "client",
+        "level": "debug",
+        "json": false,
+        "maxsize": 10240000,
+        "maxFiles": 10
+    },
+    
+    "redis":{
+        "host":"localhost",
+        "port":4307
+    },
+
+    "db": {
+        "con_string": "postgres://mabotech:mabouser@localhost:6432/maboss"
+    }
+
+}
