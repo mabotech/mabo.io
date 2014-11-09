@@ -2,6 +2,7 @@
 
 uglifyjs ua_client.js -b  --comments all > ua_client1.js
 */
+
 var nconf = require("nconf");
 
 var winston = require("winston");
@@ -58,11 +59,11 @@ async.waterfall([ function(callback) {
             callback("err");
         } else {
             console.log("connected !");
-            callback(null, "connected");
+            callback(null,"connected");
         }
     });
 }, function(status, callback) {
-    console.log("createSession:", status);
+    console.log("createSession:",status);
     client.createSession(function(err, session) {
         if (err) {
             console.log("err:", err);
@@ -70,7 +71,7 @@ async.waterfall([ function(callback) {
         } else {
             the_session = session;
             //console.log("session:", the_session)
-            callback(null, "session");
+            callback(null,"session");
         }
     });
 } ], function(err, result) {
