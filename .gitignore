@@ -1,7 +1,8 @@
-# bin
-/bin
+
 *.exe
 *.dll
+
+tmp/
 
 *.der
 

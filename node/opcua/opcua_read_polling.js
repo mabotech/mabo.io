@@ -60,7 +60,7 @@ var hb = Math.floor(new Date() / 1000)
 
 function main(){
 
-async.series([
+async.waterfall([
 
 
     // step 1 : connect to
@@ -68,11 +68,12 @@ async.series([
       client.connect(endpointUrl,function (err) {
          if(err) {
            console.log(" cannot connect to endpoint :" , endpointUrl );
+             callback(err);
          } else {
           console.log("connected !");
-
+        callback(null);
          }
-         callback(err);
+         
       });
    },
 
@@ -93,16 +94,17 @@ async.series([
            //console.log(session.name);
            */
            console.log(the_session.readVariableValue);
-
-         }
+            callback(null)
+         }else{
          callback(err);
+         }
      });
 
    },
 
  
    // step 3 : browse
-  
+  /*
    function(callback) {
 
      the_session.browse("RootFolder", function(err,browse_result,diagnostics){
@@ -114,22 +116,36 @@ async.series([
         callback(err);
      });
    },
-  
+  */
    
    // step 4 : read a variable 
    function(callback) {
+       
+       
+setTimeout(function(){
+        
+        
+          
     
-    the_session.readVariableValue(nconf.get("server").tag_array, function(err,dataValues,diagnostics) {
-    //the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
-       if (!err) {
-        console.log("dataValues: ");
-        console.log(dataValues);
-        // console.log(" Channel1.Device1.MT = " , dataValues[0].value.value);
-        // console.log(" Channel1.Device1.Tag1 = " , dataValues[1].value.value);
-       }
+        the_session.readVariableValue(nconf.get("server").tag_array, function(err,dataValues,diagnostics) {
+        //the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
+           if (!err) {
+            //console.log("dataValues: ");
+            console.log(dataValues[1].value.value);
+            // console.log(" Channel1.Device1.MT = " , dataValues[0].value.value);
+            // console.log(" Channel1.Device1.Tag1 = " , dataValues[1].value.value);
+               callback(null)
+           }else{
+               
+               callback(err)
+               
+               }
 
-       callback(err);
-     })
+           //console.log(err);
+         })}, 1000)
+     
+     
+     
    },
    
    
@@ -144,118 +160,6 @@ async.series([
 
    }
 */
- 
-   function(callback){
-       
-       the_subscription=new opcua.ClientSubscription(the_session,{
-    requestedPublishingInterval: 100,
-    requestedLifetimeCount: 60,
-    requestedMaxKeepAliveCount: 20,
-    maxNotificationsPerPublish: 20,
-    publishingEnabled: true,
-    priority: 10
-});
-
-the_subscription.on("started",function(){
-    console.log("subscription started for 2 seconds - subscriptionId=",the_subscription.subscriptionId);
-}).on("keepalive",function(){
-    
-    hb = Math.floor(new Date() / 1000)
-    console.log("keepalive");
-    
-    
-}).on("terminated",function(){
-    callback();
-});
-
-/*
-setTimeout(function(){
-    the_subscription.terminate();
-},1000000);
-*/
-
-// install monitored item
-console.log("-------------------------------------");
-var monitoredItem  = the_subscription.monitor({
-    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.MT"),
-    attributeId: 13
-},
-{
-    samplingInterval: 100,
-    discardOldest: false,
-    queueSize: 10
-});
-
-
-monitoredItem.on("changed",function(dataValue){
-   console.log(" MT = ",dataValue.value.value);
-});
-
-
-var monitoredItem2  = the_subscription.monitor({
-    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.Tag1"),
-    attributeId: 13
-},
-{
-    samplingInterval: 100,
-    discardOldest: true,
-    queueSize: 10
-});
-
-
-monitoredItem2.on("changed",function(dataValue){
-   console.log(" Tag2 = ",dataValue.value.value);
-});
-
-       
-       /*
-var subscriptionId = function(){
-
-console.log("subscriptionId");
-
-}
-
- the_subscription=new opcua.ClientSubscription(the_session,{
-            requestedPublishingInterval: 1000,
-            requestedLifetimeCount: 10,
-            requestedMaxKeepAliveCount: 2,
-            maxNotificationsPerPublish: 10,
-            publishingEnabled: false,
-            priority: 10
-        });
-        the_subscription.on("started",function(subscriptionId){
-            console.log("started",the_subscription);
-        }).on("keepalive",function(){
-            console.log("keepalive")
-        }).on("terminated",function(){
-            callback();
-        }).on("received_notifications", function(){
-            console.log("received_notifications")
-        });
-
-        setTimeout(function(){
-            the_subscription.terminate();
-        },300000); 
-        
-        
-        // install monitored item
-var monitoredItem  = the_subscription.monitor({
-    nodeId: opcua.resolveNodeId("ns=2;s=Channel1.Device1.Tag1"),
-    attributeId: 13
-},
-{
-    samplingInterval: 100,
-    discardOldest: true,
-    queueSize: 10
-});
-console.log("-------------------------------------");
-
-monitoredItem.on("changed",function(dataValue){
-   console.log(" % free mem = ",dataValue.value.value);
-});
-        
-*/
-   }
   
  
   /*
@@ -277,11 +181,14 @@ monitoredItem.on("changed",function(dataValue){
     console.log("done!")
   }
   // disconnect regardless
+  /*
   client.disconnect(function(){
       
     console.log("disconnect")
       
       });
+      
+      */
 }) ;
 
 } // end main
@@ -290,11 +197,28 @@ main()
 
 var retry = 0
 
-var INTERVAL = 500
+var INTERVAL = 100
 
 function loop(){
 
     setTimeout(function(){
+        
+        
+          
+    
+        the_session.readVariableValue(nconf.get("server").tag_array, function(err,dataValues,diagnostics) {
+        //the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
+           if (!err) {
+            //console.log("dataValues: ");
+            console.log(dataValues[1].value.value);
+            // console.log(" Channel1.Device1.MT = " , dataValues[0].value.value);
+            // console.log(" Channel1.Device1.Tag1 = " , dataValues[1].value.value);
+           }
+
+           //console.log(err);
+         })
+         
+   
         
         var now = Math.floor(new Date() / 1000)
         
@@ -309,13 +233,14 @@ function loop(){
             
             console.log("ok")   
             
-            }          
+            }        
+INTERVAL = 500            
         loop()
     }, INTERVAL);
 
 } // end loop
 
-loop()
+//loop()
 
 //TODO: reload config,   tag or lisenter?
 // writer

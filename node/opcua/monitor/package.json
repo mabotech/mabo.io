@@ -1,0 +1,36 @@
+{
+    "name": "opcua.io",
+    "description": "mabo iot opcua",
+    "version": "0.0.1",
+    "keywords": [
+        "mabo",
+        "IoT",
+        "OPCUA",
+        "platform"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/mabotech/mabo.io.git"
+    },
+    "scripts": {
+        "start": "node --harmony server.js"
+    },
+    "engines": {
+        "node": ">= 0.11.14"
+    },
+    "files": [
+        "index.js"
+    ],
+    "devDependencies": {
+        "debug": "debug",
+        "mocha": "*",
+        "should": "*"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "node-opcua": "*",
+        "winston": "*",
+        "nconf": "*",
+        "redis": "*"
+    }
+}   
