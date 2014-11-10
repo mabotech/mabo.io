@@ -22,7 +22,7 @@
         "index.js"
     ],
     "devDependencies": {
-        "debug": "debug",
+        "debug": "*",
         "mocha": "*",
         "should": "*"
     },
