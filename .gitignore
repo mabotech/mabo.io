@@ -3,6 +3,7 @@
 *.dll
 *.pak
 
+*.png
 
 tmp/
 

@@ -26,3 +26,7 @@ CircuitBreaker
 
 - [node-opcua](http://node-opcua.github.io/)
 
+
+## Install
+
+npm install

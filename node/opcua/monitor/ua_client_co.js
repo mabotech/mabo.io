@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>OPC UA</title>
-  </head>
-  <body>
-    <h1>Client for OPC UA </h1>
-    We are using node.js <script>document.write(process.version)</script>.
-    
-    <div id="a1"></div>
-    <script>
-    
-    /*
+/*
 
 uglifyjs ua_client.js -b  --comments all > ua_client1.js
 */
@@ -20,7 +8,7 @@ var winston = require("winston");
 
 var opcua = require("node-opcua");
 
-var async = require("async");
+var co = require("co");
 
 nconf.file("config.json");
 
@@ -46,7 +34,7 @@ var i = 0;
 
 var t = new Date().getTime();
 
-var tags = [ "ns=2;s=Channel1.Device1.fV1"]; //, "ns=2;s=Channel1.Device1.fV2", "ns=2;s=Channel1.Device1.MT", "ns=2;s=Channel1.Device1.Tag1", "ns=2;s=Channel1.Device1.Tag2", "ns=2;s=Channel1.Device1.test" 
+var tags = [ "ns=2;s=Channel1.Device1.fV1", "ns=2;s=Channel1.Device1.fV2", "ns=2;s=Channel1.Device1.MT", "ns=2;s=Channel1.Device1.Tag1", "ns=2;s=Channel1.Device1.Tag2", "ns=2;s=Channel1.Device1.test" ];
 
 var read = function() {
     the_session.readVariableValue(//      nconf.get("server").tag_array,  //points array
@@ -55,47 +43,48 @@ var read = function() {
         //the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
         if (!err) {
             dataValues.forEach(function(data, index) {
-                //console.log(tags[index]);
-                var t = new Date()
-                //console.log(data.value.value);
-                
-                document.write(t.getTime()+"<br/>") //data.value.value
+                console.log(tags[index]);
+                console.log(data.value.value);
             });
-            //console.log("==============================");
+            console.log("==============================");
         }
     });
 };
 
-async.waterfall([ function(callback) {
-    client.connect(endpointUrl, function(err) {
+var callback1 = function(err) {
         if (err) {
             console.log(" cannot connect to endpoint :", endpointUrl);
-            callback("err");
+           
         } else {
             console.log("connected !");
-            callback(null, "connected");
+         
         }
-    });
-}, function(status, callback) {
-    console.log("createSession:", status);
-    client.createSession(function(err, session) {
+        return 1
+    }
+
+    var callback2 = function(err, session) {
         if (err) {
             console.log("err:", err);
-            callback("err");
+            
         } else {
             the_session = session;
-            //console.log("session:", the_session)
-            callback(null, "session");
+            console.log("session:", the_session)
+            return 1
+        
         }
-    });
-} ], function(err, result) {
+        return 1
+    }
+    
+co( function *() {
+    
+    yield function(){client.connect(endpointUrl, callback1);}
+    
+    
+ 
+    yield function(){client.createSession(callback2)};
+ 
     // result now equals 'done'    
     //assert(the_session)
-    setInterval(read, 5000);
+    yield function(){setInterval(read, 500);}
     console.log("result:", result);
-});
-    
-    </script>
-    <div>We need 0.11.14</div>
-  </body>
-</html>
+})();
