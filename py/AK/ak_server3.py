@@ -26,9 +26,12 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         self.request.close()
 
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 6010
+    
+    # Commands and replies are exchanged on TCP port 23800.  
+    # real time data is available via TCP (port 23805)
+    HOST, PORT = "localhost", 23805 
 
-    # Create the server, binding to localhost on port 9999
+    # Create the server, binding to localhost on port
     server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 
     # Activate the server; this will keep running until you
