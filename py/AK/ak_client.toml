@@ -3,7 +3,7 @@
 [client]
 
 host = "127.0.0.1"
-port = 6010
+port = 23800
 
 cmd = "AVFI"
 
@@ -24,6 +24,7 @@ equipment = "BEP"
 
 channel_number = 0
 
+# for response telegram
 non_data_len = 10
 
 [redis]

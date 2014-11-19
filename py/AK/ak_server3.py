@@ -1,8 +1,11 @@
 
 # simulator for ak server
+import sys
 
 import socket
 import struct
+
+import toml
 
 import SocketServer
 
@@ -29,11 +32,26 @@ if __name__ == "__main__":
     
     # Commands and replies are exchanged on TCP port 23800.  
     # real time data is available via TCP (port 23805)
-    HOST, PORT = "localhost", 23805 
+    conf_fn = "ak_server.toml"
+    
+    with open(conf_fn) as conf_fh:
+        
+        conf = toml.loads(conf_fh.read())
+    
+    
+    #print conf
+    
+    HOST = conf["server"]["host"]
+    PORT = conf["server"]["port"]
+    
+    #HOST, PORT = "localhost", 23805 
+    
+    
+    #sys.exit(0)
 
     # Create the server, binding to localhost on port
     server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
-
+    print("AK Host Simulator on %s:%s" %(HOST, PORT))
     # Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
     server.serve_forever()

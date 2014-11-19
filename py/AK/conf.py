@@ -24,3 +24,4 @@ class Conf(object):
         for item in conf["logging"]:
             #print item
             setattr(self, item, conf["logging"][item])      
+

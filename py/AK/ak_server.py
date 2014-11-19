@@ -105,7 +105,7 @@ def main():
     port = conf["server"]["port"]
      
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print 'Socket created'
+    print 'Socket created %s:%s' % (host, port)
      
     #Bind socket to local host and port
     try:
