@@ -41,12 +41,20 @@ def pack(cmd):
     
     dt = strftime("%Y-%m-%d %H:%M:%S", localtime())
     
-    data = "MABO TEST " + dt
-    dlen = len(data)
+    if cmd == "ASTF":
+        
+        fmt = "!2b%ds3b" % (clen)    
+        # 0x48:'0'
+        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, 0x30, ETX)         
     
-    fmt = "!2b%ds3b%ds1b" % (clen, dlen)
+    else:
+        data = " SMAN STBY SLIR SVOR SBEI N/A "
+        dlen = len(data)
+        
+        fmt = "!2b%ds3b%ds1b" % (clen, dlen)
     
-    buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, 0x01, BLANK, data, ETX) 
+        # 0x48:'0'
+        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, 0x48, BLANK, data, ETX) 
     
     print buf
     

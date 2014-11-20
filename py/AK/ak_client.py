@@ -100,24 +100,29 @@ class AKClient(object):
         """ recv """
         
         data = self.sock.recv(1024)
+        logger.debug( data )   
+        print "data:%s:" %(data)
+        
+        #return 0
         
         dlen = len(data) - conf.non_data_len#10
         
         if dlen < 0:
-            raise Exception("struct error")
+            #raise Exception("struct error")
+            fmt = "!2b4s3b"
             
-        logger.debug( data )        
-        
-        # AK Response telegram
-        fmt = "!2b4s3b%ds1b" % (dlen)
+             
+        else:
+            # AK Response telegram
+            fmt = "!2b4s3b%ds1b" % (dlen)
         
         try:
             val = struct.unpack(fmt, data)
-            
+            print(val)
             self.parse(val)
             
         except Exception as ex:
-            
+            print(ex)
             logger.error(ex)
         
         #print(val)
