@@ -13,7 +13,7 @@
 
 import argparse
 import collections
-import math
+#import math
 import multiprocessing
 import os
 import sys
@@ -32,7 +32,9 @@ Summary = collections.namedtuple("Summary", "todo copied scaled canceled")
 
 
 def main():
+    
     t1 = time.time()
+    
     print(multiprocessing.cpu_count())
     
     size, smooth, source, target, concurrency = (100,1,".",".",4) #handle_commandline()
@@ -108,8 +110,8 @@ def add_jobs(source, target, jobs):
         sourceImage = os.path.join(source, name)
         targetImage = os.path.join(target, name)
         jobs.put((sourceImage, targetImage))
-        jobs.put((sourceImage, targetImage))
-        jobs.put((sourceImage, targetImage))
+        #jobs.put((sourceImage, targetImage))
+        #jobs.put((sourceImage, targetImage))
     #print todo
     return todo
 

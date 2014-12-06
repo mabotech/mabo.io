@@ -1,4 +1,6 @@
 
+import time
+
 import socket
 
 import gevent
@@ -10,11 +12,15 @@ import numpy as np
 import itertools
 import sys
 
-import time
+
 
 def findKeyPoints(img, template, distance=200):
-    detector = cv2.FeatureDetector_create("SIFT")
-    descriptor = cv2.DescriptorExtractor_create("SIFT")
+    """ find key points in image """
+    
+    # SIFT
+    FEATURE_DETECTOR = "SIFT" #"SURF" # "SIFT"
+    detector = cv2.FeatureDetector_create(FEATURE_DETECTOR)
+    descriptor = cv2.DescriptorExtractor_create(FEATURE_DETECTOR)
 
     skp = detector.detect(img)
     skp, sd = descriptor.compute(img, skp)
@@ -96,37 +102,19 @@ def match():
     
 def main():
 
-    logo = cv2.imread("cctv2.png")#sys.argv[2])
+    logo = cv2.imread("logo1.png")#sys.argv[2])
     print type(logo)
-    cv.NamedWindow("VIDEO", 1)
     
-    # rtsp://cam_address:554/live.sdp
-    #capture = cv.CaptureFromCAM(0)
-    #capture = cv.CaptureFromFile("rtsp://192.168.2.58:554")
-    capture = cv2.VideoCapture("rtsp://192.168.2.58:554")
+    #cv2.NamedWindow("camera", 1)
     
-    #capture =cv2.VideoCapture("rtsp://192.168.2.58:554")
-    c = 0
     
+    capture = cv2.VideoCapture(0)
+
     while True:
         
-        """
-        v = int(time.time())
-        #print v
+        ret, img_p = capture.read() #cv.QueryFrame(capture)
         
-        if v & 6 !=0:
-            continue
-        """
-        #img = cv.QueryFrame(capture)
-        
-        
-        ret, mat = capture.read()
-        
-        #mat=cv.GetMat(img)
-        img_p = np.asarray(mat)
-
-  
-        #mat=cv.GetMat(img)
+        #mat=cv2.GetMat(img)
         #img_p = np.asarray(mat)
         
         #img_p  = cv.CreateImage(cv.GetSize(img),cv.IPL_DEPTH_8U,1)
@@ -145,40 +133,20 @@ def main():
         """
         try:
             
-            v = int(time.time())
+            # skp: source key points, tkp: target key points
+            t1 = time.time()
+            skp, tkp = findKeyPoints(img_p, logo, 20)
+            print "==" * 20
+            print "time:",time.time() - t1, ret
+            print "skp", len(skp)#, skp
+            print "tkp",len(tkp)#, tkp
             
-            if v % 2 ==0:
-                
-                if c == 0:
-                    c = 1
-                    skp, tkp = findKeyPoints(img_p, logo, 15)
-
-                    newimg = drawKeyPoints(img_p, logo, skp, tkp, -1)
-                    print(len(tkp))
-                cv2.imshow("VIDEO", newimg)
-                
-            else:
-                c = 0
-                cv2.imshow("VIDEO", newimg)                
-                
-            """    
+            newimg = drawKeyPoints(img_p, logo, skp, tkp, -1)
             
-            #print v
-            
-            
-        
-                    skp, tkp = findKeyPoints(img_p, logo, 15)
-
-                    newimg = drawKeyPoints(img_p, logo, skp, tkp, -1)
-                    print(len(tkp))
-                cv2.imshow("camera", newimg)
-            else:
-                c = 0
-                cv2.imshow("camera", newimg)
-            """
+            cv2.imshow("camera", newimg)
         except Exception as ex:
             print(ex)
-            gevent.sleep(0.01)
+            gevent.sleep(3)
             continue
         #cv.ShowImage('camera', newimg)
         
@@ -196,7 +164,7 @@ def main():
         if cv.WaitKey(10) == 27:
             break
             
-        #gevent.sleep(0.5)
+        #gevent.sleep(0.1)
         
     cv.DestroyWindow("camera")
     
