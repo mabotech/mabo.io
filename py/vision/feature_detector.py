@@ -41,6 +41,8 @@ def detector(device, results):
         finally:
             # sleep
             gevent.sleep(0.1)
+            
+        
         
 def detect_one(device, capture, logo):
     """ work here """
@@ -64,7 +66,7 @@ def detect_one(device, capture, logo):
         cv2.imwrite(filename, newimg)
     
     
-    cost = time.time() - start
+    cost = "%.3f" %(time.time() - start)
     
     pid =  os.getpid()
     count = len(skp)

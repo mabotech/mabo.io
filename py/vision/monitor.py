@@ -38,7 +38,7 @@ def monitor(results):
         
         try:
             result = results.get()
-            report("result.count:%s" %(result.count))
+            report("result.count:%s, cost:[%s]" %(result.count, result.cost))
             #newimg = result.cost
             #cv2.imshow("camera", newimg)
             

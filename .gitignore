@@ -4,6 +4,7 @@
 *.pak
 
 *.png
+*.jpg
 *.wmv
 
 tmp/

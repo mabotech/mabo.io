@@ -55,6 +55,8 @@ def findKeyPoints(img, template, distance=200):
     return skp_final, tkp_final
     
 def drawKeyPoints(img, template, skp, tkp, num=-1):
+    """ """
+    
     h1, w1 = img.shape[:2]
     h2, w2 = template.shape[:2]
     nWidth = w1+w2
