@@ -3,7 +3,7 @@ import socket
 
 import gevent
 
-import cv2.cv as cv
+#import cv2.cv as cv
 
 import cv2
 import numpy as np
@@ -96,9 +96,9 @@ def main():
 
     logo = cv2.imread("logo1.png")#sys.argv[2])
     print type(logo)
-    cv.NamedWindow("camera", 1)
+    #cv.NamedWindow("camera", 1)
     
-    capture = cv.CaptureFromCAM(0)
+    capture = cv2.CaptureFromCAM(0)
 
     while True:
         

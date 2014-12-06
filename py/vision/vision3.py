@@ -5,7 +5,7 @@ import socket
 
 import gevent
 
-import cv2.cv as cv
+#import cv2.cv as cv
 
 import cv2
 import numpy as np
@@ -161,7 +161,7 @@ def main():
     #    cv.AbsDiff(im_gray,imageBlur,diff)
     #    cv.ShowImage('camera', diff)
         
-        if cv.WaitKey(10) == 27:
+        if cv2.waitKey(10) == 27:
             break
             
         #gevent.sleep(0.1)
