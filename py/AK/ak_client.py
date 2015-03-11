@@ -9,6 +9,8 @@ AK Protocol
 import socket
 import struct
 
+import traceback
+
 #import aklib
 
 import gevent
@@ -31,6 +33,13 @@ ETX = 0x03
 BLANK = 0x20
 K = ord('K')   
 
+# socket status
+
+UNKNOWN = 0
+SOCKET_OPENED = 1
+SOCKET_CONNECTED = 2
+SOCKET_CLOSED = 3
+
 
 class AKClient(object):
     
@@ -46,23 +55,74 @@ class AKClient(object):
     def __init__(self):        
         """ init """
         
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
         
         self.connected = 0
+        self.closed = 0
+        
+        self.socket_status = UNKNOWN
         
         self.i = 0
         
-        self.retry = 0        
+        self.retry = 0   
+
+        self.last_errno = 0
+        
+        self.open()
+        
+    
+    def open(self):
+        
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket_status = SOCKET_OPENED
         
     def connect(self):        
         """ connect """
-        try:         
+        try:
             
-            self.sock.connect((conf.host, conf.port))
+            logger.debug("connecting...")
+            
+            if self.closed == 0:
+                
+                self.sock.connect((conf.host, conf.port))
+
+            else:
+                # open a socket
+                #self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
+                self.open()
+                self.sock.connect((conf.host, conf.port))
+                
+                self.closed = 0
+            
+            self.connected = 1
+            self.socket_status = SOCKET_CONNECTED
             
         except Exception as ex:
-            print ex
-            self.sock = None
+            
+            #logger.debug(traceback.format_exc())
+            
+            if self.last_errno == ex.errno:
+                logger.debug("[Errno %s]" %(ex.errno))
+            else:
+                self.last_errno = ex.errno
+                logger.debug(ex)               
+                
+            self.connected = 0
+            #self.sock = None
+
+    def close(self):        
+        """ close socket """
+        
+        try:
+            
+            self.sock.close()
+            self.closed = 1
+            self.socket_status = SOCKET_CLOSED
+            
+        except Exception as ex:
+            
+            logger.debug(ex)
+            logger.debug("closed?")
             
     def pack(self, cmd):        
         """ pack """        
@@ -73,17 +133,20 @@ class AKClient(object):
         fmt = "!2b%ds5b" % (clen)
         #print fmt
         buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, conf.channel_number, BLANK, ETX)
-        print(buf)
+        logger.debug(buf)
         return buf
     
     def send(self, buf):        
         """ send """
-        
-        self.sock.sendall(buf)
-        
+        try:
+            self.sock.sendall(buf)
+        except Exception as ex:
+            logger.debug(ex)
+            raise(Exception(ex))
+            
     def parse(self, val):
         """ process received data """
-        print(val)
+        logger.debug(val)
         try:
             
             func =  getattr(aklib, val[2].lower())
@@ -99,9 +162,14 @@ class AKClient(object):
     def recv(self):        
         """ recv """
         
-        data = self.sock.recv(1024)
+        try:
+            data = self.sock.recv(1024)
+        except Exception as ex:
+            logger.debug(ex)
+            raise(Exception(ex))
+        
         logger.debug( data )   
-        print "data:%s:" %(data)
+        #print "data:%s:" %(data)
         
         #return 0
         
@@ -118,11 +186,11 @@ class AKClient(object):
         
         try:
             val = struct.unpack(fmt, data)
-            print(val)
+            logger.debug(val)
             self.parse(val)
             
         except Exception as ex:
-            print(ex)
+            #logger.debug(ex)
             logger.error(ex)
         
         #print(val)
@@ -137,33 +205,41 @@ class AKClient(object):
         #print val
         #print repr(val)       
     
-    def close(self):        
-        """ close socket """
-        
-        self.sock.close()
-    
+
+            
+            
     def get_data(self, cmd):
         
         try:               
             
-            buf = self.pack(cmd)
-            
+            buf = self.pack(cmd)            
             # send 
             self.send(buf)
             # receive [block]
             self.recv()
             
         except Exception as ex:
-            print (ex)
-            try:
-                self.close()
-            except Exception as ex:
-                print (ex)
-                print("closed?")
-
+            logger.debug("182")
+            logger.debug(ex)            
+            self.close()            
             #ak_client.connect()
             self.connected = 0        
         
+    
+    def check_conn(self):
+        
+        logger.debug(self.connected)
+        
+        if self.connected == 0:
+            self.connect()
+            
+        if self.connected == 0:
+            
+            return 0
+        else:
+            self.connected = 1
+            return 1
+    
     def cb(self):
         
         if self.connected == 0:
@@ -193,27 +269,41 @@ class AKClient(object):
         
         while 1:
        
-            self.cb()
+            self.check_conn()
+            
+           
+            if self.connected == 0:
                 
-            cmd = "AVFI"
-            cmd = "AWEG"
-            cmd = "AWRT"
+                # sleep
+                gevent.sleep(conf.reconnection_interval)
             
-            cmds = ["ASTF", "ASTZ", "AWRT"]
-            
-            try:
-                if i<len(cmds):
-                    cmd = cmds[i]
-                    i = i +1
-                    self.get_data(cmd)
-                    gevent.sleep(conf.ticker_interval)
+            else:
+                
+                cmd = "AVFI"
+                cmd = "AWEG"
+                cmd = "AWRT"
+                
+                cmds = ["ASTF", "ASTZ", "AWRT"]
+                
+                try:
+                    if i<len(cmds):
+                        
+                        cmd = cmds[i]
+                        
+                        i = i +1
+                        
+                        self.get_data(cmd)
+                        
+                        # sleep
+                        gevent.sleep(conf.ticker_interval)
+                        
+                    else:
+                        i = 0
+                        #cmd = cmds[i]
                     
-                else:
-                    i = 0
-                    #cmd = cmds[i]
-                
-            except:
-                pass
+                except Exception as ex:
+                    logger.debug(ex)
+                    raise(Exception("loop broken"))
                 
             
         #ak_client.close()        
