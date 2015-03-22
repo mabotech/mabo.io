@@ -37,9 +37,7 @@ class DataSub(object):
          
         sub.subscribe('point:abc')
 
-        for msg in sub.listen():
-            
-            
+        for msg in sub.listen():            
             
             self.process(msg)            
           
@@ -56,7 +54,7 @@ class DataSub(object):
         
             val = self.rclient.lpop("point:abc:def")
             
-            print val  
+            print "point:abc:def",val  
         
         #print rclient.lrange("point:abc:def", 0, -1)
         

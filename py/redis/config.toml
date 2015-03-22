@@ -1,0 +1,17 @@
+
+[app]
+
+HOST = "localhost"
+PORT = 6379
+DB = 4
+
+CHANNEL = "c1"
+QUEUE = "q2"
+
+URL = "http://127.0.0.1:6226/api/v1/callproc.call"
+
+#HEADERS = {"content-type": "application/json", "accept":"json","User-Agent":"mabo"}
+
+[logging]
+
+LEVEL = "DEBUG"

@@ -18,7 +18,7 @@ class DataPub(object):
     def __init__(self):
         """ init """
         
-        rpool = redis.ConnectionPool(host='localhost', port=6379, db=6, \
+        rpool = redis.ConnectionPool(host='localhost', port=6379, db=8, \
                     max_connections=REDIS_MAX_CONNECTIONS)
 
         self.rclient = redis.Redis(connection_pool=rpool) 
