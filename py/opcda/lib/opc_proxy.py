@@ -100,6 +100,7 @@ class OPCProxy:
             log.debug( str(oe) )
             raise Exception(oe.message)
         except Exception, e:
+            print traceback.format_exc()
             log.debug(traceback.print_exc() )
             raise Exception(e.message)
 

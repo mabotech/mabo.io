@@ -1,0 +1,12 @@
+
+[app]
+
+HOST = "127.0.0.1"
+
+PORT = 7766
+
+OPC_SERVER = "Kepware.KEPServerEX.V5"
+
+TAGS = ["Digi.cool_system.A1", "Digi.cool_system.A11"]
+
+UPDATE = 200

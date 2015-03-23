@@ -1,0 +1,20 @@
+
+[app]
+
+HOST = "localhost"
+
+PORT = 7766
+
+PROVIDER = "SWToolbox.TOPServer.V5"
+
+OPC_SERVER = ""
+
+OPC_HOST = ""
+
+TIMEOUT = 30
+
+TAGS = ["tag1","tag2"]
+
+INTERVAL = 5
+
+GROUPS = []
