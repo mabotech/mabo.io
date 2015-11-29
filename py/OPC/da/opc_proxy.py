@@ -24,7 +24,7 @@ log = logging.getLogger(__file__)
 #import simplejson as json
 from mabopy.patterns.singleton import Singleton
 
-from exceptions import GatewayException, OPCServerException
+#from exceptions import GatewayException, OPCServerException
 
 class OPCProxy(object):
     
@@ -273,7 +273,7 @@ if __name__ == "__main__":
     port = 7766
     opc_host = 'mabo01'
     
-    mode = 'dcom'
+    mode = 'open'
     
     opc = OPCProxy(mode, host, port, opc_server, opc_host , 20000)
     opc.connect()

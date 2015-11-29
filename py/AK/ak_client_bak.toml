@@ -1,0 +1,59 @@
+
+
+[client]
+
+host = "127.0.0.1"
+port = 23800
+
+#cmd = "AVFI"
+# ASTF - 	Request active faults
+# ASTZ  - 	Request actual status
+
+cmd_seq = ["ASTZ"]
+
+
+
+seq_interval = 3
+
+ticker_interval = 1
+
+reconnection_interval = 5
+
+max_retry = 5
+retry_interval = 3
+
+timeout = 10
+
+#BEP,  MAHA, HORIBA, AVL
+
+equipment = "BEP"
+# equipment id
+equipment_id = "eqm001"
+
+#
+channel_number = 0
+
+# for response telegram
+non_data_len = 10
+
+LUA_SCRIPT = "lua/update2.lua"
+
+[redis]
+
+redis_host = "127.0.0.1"
+redis_port = 4357
+db = 1
+
+[logging]
+
+logfile = "ak_client.log"
+
+level = "DEBUG"
+
+datetime_format = "local"
+
+max_size = 102400
+backup_count = 5
+
+
+

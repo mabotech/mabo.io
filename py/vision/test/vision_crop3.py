@@ -123,14 +123,14 @@ def match():
     
 def main():
 
-    logo = cv2.imread("logo1.png")#sys.argv[2])
+    logo = cv2.imread("maha2.png")#sys.argv[2])
     print type(logo)
     
     #cv2.NamedWindow("camera", 1)
     
     
     #capture = cv2.VideoCapture(0)
-    capture = cv2.VideoCapture("rtsp://192.168.1.58:554")
+    capture = cv2.VideoCapture("rtsp://192.168.199.26:554")
     
     i = 0
     while True:

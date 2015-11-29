@@ -154,14 +154,14 @@ def match():
     
 def main():
 
-    logo = cv2.imread("logo1.png")#sys.argv[2])
+    logo = cv2.imread("test.jpg")#sys.argv[2])
     print type(logo)
     
     #cv2.NamedWindow("camera", 1)
     
     
     #capture = cv2.VideoCapture(0)
-    capture = cv2.VideoCapture("rtsp://192.168.1.58:554")
+    capture = cv2.VideoCapture("rtsp://192.168.199.26:554")
     
     i = 0
     while True:
@@ -170,7 +170,7 @@ def main():
         #    i = 0
         
         ret, img_read = capture.read() #cv.QueryFrame(capture)
-        print img_read
+        #print img_read
         #print(type(img_read))
         #print ret
         
@@ -210,7 +210,7 @@ def main():
             
             pt1 = (200,200)
             
-            w = 100
+            w = 200
             
             pt2 = (pt1[0]+w,pt1[1]+w)
             

@@ -1,0 +1,38 @@
+
+[app]
+
+HOST = "localhost"
+
+PORT = 7766
+
+# PROVIDER = "SWToolbox.TOPServer.V5"
+
+PROVIDER = "OPC.SimaticNET"
+
+# OPC_SERVER = "OPC.SimaticNET.DP.1"
+
+OPC_HOST = "localhost"
+
+TIMEOUT = 10
+
+TAGS = ["CC.CPU_CC.6_1_DATA.SPEED_FA_6_1.soak","CC.CPU_CC.User_Input.MAIN_X_1.RUN"]
+
+INTERVAL = 5
+
+GROUP = "IMTECH"
+
+
+
+
+[redis]
+
+
+
+REDIS_HOST = "192.168.199.10"
+#"192.168.199.40"
+REDIS_PORT = 6379
+REDIS_DB = 0
+
+equipment_id = 9
+
+LUA_SCRIPT = "lua/send.lua"

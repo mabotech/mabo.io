@@ -1,0 +1,40 @@
+
+[app]
+
+target = "target.png"
+
+camera_uri = "rtsp://192.168.1.10:554/user=admin&password=&channel=1&stream=0.sdp?"
+
+crop_start = [250,130]
+
+crop_start_x = 180
+#(180,250)
+crop_start_y = 250
+
+corp_width = 140
+
+throshhold = 20
+
+distance = 25
+
+DEBUG = "true"
+
+## HoughCircles
+dp = 1
+minDist = 100
+param1 = 70
+param2 = 100
+minRadius = 20
+maxRadius = 0
+
+
+
+redis_key = "eqm003_carema"
+equipment_id = "eqm003"
+
+[redis]
+
+HOST = "127.0.0.1"
+PORT = 6379
+DB = 1
+LUA_SCRIPT = "lua/update2.lua"

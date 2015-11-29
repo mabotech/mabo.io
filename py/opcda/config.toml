@@ -5,16 +5,33 @@ HOST = "localhost"
 
 PORT = 7766
 
-PROVIDER = "SWToolbox.TOPServer.V5"
+# PROVIDER = "SWToolbox.TOPServer.V5"
+PROVIDER = "Kepware.KEPServerEX.V5"
 
 OPC_SERVER = ""
 
-OPC_HOST = ""
+OPC_HOST = "127.0.0.1"
 
 TIMEOUT = 30
 
-TAGS = ["tag1","tag2"]
+TAGS = ["Digi.cool_system.A1", "Digi.cool_system.A11"]
 
 INTERVAL = 5
 
-GROUPS = []
+GROUP = "IMTECH"
+
+
+
+
+[redis]
+
+
+
+REDIS_HOST = "localhost"
+#"192.168.199.40"
+REDIS_PORT = 6389
+REDIS_DB = 0
+
+equipment_id = 8
+
+LUA_SCRIPT = "lua/send.lua"

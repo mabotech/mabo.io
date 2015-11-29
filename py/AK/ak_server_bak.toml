@@ -1,0 +1,19 @@
+
+
+[server]
+
+host = "127.0.0.1"
+port = 23801
+
+
+
+[logging]
+
+logfile = "ak_server.log"
+
+level = "DEBUG"
+
+datetime_format = "local"
+
+max_size = 102400
+backup_count = 5

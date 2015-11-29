@@ -2,7 +2,7 @@
 
 """ global conf """
 
-from mabopy.patterns.singleton import Singleton
+from lib.singleton import Singleton
 
 from utils import get_conf
 
@@ -20,6 +20,10 @@ class Conf(object):
         for item in conf["client"]:
             #print item
             setattr(self, item, conf["client"][item])    
+            
+        for item in conf["redis"]:
+            #print item
+            setattr(self, "redis_%s" %(item), conf["redis"][item])                
 
         for item in conf["logging"]:
             #print item

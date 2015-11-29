@@ -1,0 +1,42 @@
+
+[app]
+
+
+Use_Wrapper = "true"
+
+DAWrapper = "Graybox.OPC.DAWrapper"
+
+HOST = "localhost"
+
+PORT = 7766
+
+# PROVIDER = "SWToolbox.TOPServer.V5"
+PROVIDER = "Kepware.KEPServerEX.V5"
+
+OPC_SERVER = ""
+
+OPC_HOST = "127.0.0.1"
+
+equipment_id = "eqm002_camera"
+
+TIMEOUT = 30
+
+TAGS = ["Digi.cool_system.A1", "Digi.cool_system.A11"]
+
+INTERVAL = 5
+
+GROUP = "IMTECH"
+
+logging_config = "config/logging.json"
+log_base = "logs"
+app_name = "opc_monitor"
+
+
+[redis]
+
+host = "127.0.0.1"
+#"192.168.199.40"
+port = 6389
+db = 1
+
+lua_script = "lua/update_camera.lua"

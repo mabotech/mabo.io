@@ -6,7 +6,7 @@
         
         "name":"TopServer",
         
-        "endpointUrl": "opc.tcp://127.0.0.1:49380",
+        "endpointUrl": "opc.tcp://127.0.0.1:49320",
 
         "tags1": [{
             "tag": "ns=2;s=Channel1.Device1.test",
@@ -25,8 +25,7 @@
     },
     
     "logging":{
-        "filename": "logs/client1.log",
-        "label": "client",
+        "filename": "logs/data02.csv",    
         "level": "debug",
         "json": false,
         "maxsize": 10240000,

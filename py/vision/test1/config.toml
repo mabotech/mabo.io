@@ -1,0 +1,19 @@
+
+
+[vision]
+
+channel = "vi"
+
+addresses = [0, "192.168.2.58:556"]
+
+refs = ["p1.png", "p2.png"]
+
+sleep = 5
+
+feature = "SIFT"
+
+heartbeat = 10
+
+[logging]
+
+[redis]

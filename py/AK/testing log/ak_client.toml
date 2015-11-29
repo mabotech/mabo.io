@@ -1,0 +1,61 @@
+
+
+[client]
+
+host = "172.16.200.1"
+port = 23800
+
+cmd = "AVFI"
+
+cmd_seq = ["AVFI","AVFI"]
+
+cmds = ["AFLT 48"]
+#["ASTF", "ASTZ", "AWRT"]
+
+seq_interval = 3
+
+ticker_interval = 1
+
+reconnection_interval = 5
+
+max_retry = 5
+retry_interval = 3
+
+timeout = 10
+
+#BEP,  MAHA, HORIBA, AVL
+
+equipment = "BEP"
+
+channel_number = 0
+
+# for response telegram
+non_data_len = 10
+
+[redis]
+
+host = "127.0.0.1"
+port = 6379
+db = 5
+
+[influxdb]
+
+[heka]
+
+[logging]
+
+logfile = "logs/ak_client.log"
+
+level = "DEBUG"
+
+datetime_format = "local"
+
+max_size = 102400
+backup_count = 5
+
+# 0,1
+bubble = 0
+
+
+
+

@@ -131,7 +131,7 @@ def main():
         if i > 200:
             i = 0
         ret, img_read = capture.read() #cv.QueryFrame(capture)
-        
+        print ret
         #mat=cv2.GetMat(img)
         #img_p = np.asarray(mat)
         
@@ -177,7 +177,7 @@ def main():
             cv2.imshow("camera", newimg)
         except Exception as ex:
             print(ex)
-            gevent.sleep(3)
+            #gevent.sleep(3)
             continue
         #cv.ShowImage('camera', newimg)
         

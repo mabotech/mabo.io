@@ -1,0 +1,20 @@
+
+[app]
+
+target = "sh1.png"
+
+camera_uri = "rtsp://192.168.1.10:554/user=admin&password=&channel=1&stream=0.sdp?"
+
+crop_start = [180,150]
+
+crop_start_x = 80
+#(180,250)
+crop_start_y = 150
+
+corp_width = 250
+
+throshhold = 20
+
+distance = 25
+
+debug = 1

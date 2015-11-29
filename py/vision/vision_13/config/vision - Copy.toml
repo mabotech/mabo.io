@@ -1,0 +1,45 @@
+	
+[app]
+
+logging_config = "config/logging.json"
+log_base = "logs"
+app_name = "vision"
+
+
+target = "target.png"
+
+camera_uri = "rtsp://192.168.199.13:554"
+
+crop_start = [360,210]
+
+crop_start_x = 180
+#(180,250)
+crop_start_y = 110
+
+corp_width = 140
+
+throshhold = 20
+
+distance = 25
+
+DEBUG = "true"
+
+## HoughCircles
+dp = 10
+minDist = 100
+param1 = 50
+param2 = 100
+minRadius = 15
+maxRadius = 0
+
+
+
+redis_key = "eqm002_camera"
+equipment_id = "eqm002"
+
+[redis]
+
+host = "127.0.0.1"
+port = 6379
+db = 1
+lua_script = "lua/client_update3.lua"

@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 a = Analysis(['ak_client.py'],
-             pathex=['E:\\mabodev\\mabo.io\\py\\AK'],
+             pathex=['e:\\mabodev\\mabo.io\\py\\AK'],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None)

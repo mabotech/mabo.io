@@ -1,0 +1,20 @@
+
+[app]
+
+target = "target.png"
+
+camera_uri = "rtsp://192.168.1.254:554"
+
+crop_start = [250,150]
+
+crop_start_x = 180
+#(180,250)
+crop_start_y = 250
+
+corp_width = 140
+
+throshhold = 20
+
+distance = 25
+
+debug = 1

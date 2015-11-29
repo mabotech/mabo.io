@@ -1,0 +1,31 @@
+C:\OpenOPC\bin>opc -C Graybox.OPC.DAWrapper  -s OPC.SimaticNET -r CC.CPU_CC.6_1_DATA.SPEED_FA_6_1.soak
+
+CC.CPU_CC.6_1_DATA.SPEED_FA_6_1.soak     70.0000     Good     05/04/15 17:42:24
+
+Read 1 of 1 items (0.31 seconds)
+
+
+Traceback (most recent call last):
+  File "C:\Mabo\mabo.io\opcda\monitor.py", line 8, in <module>
+    import pythoncom
+  File "C:\Python27\lib\site-packages\pythoncom.py", line 2, in <module>
+    import pywintypes
+  File "C:\Python27\lib\site-packages\win32\lib\pywintypes.py", line 124, in <module>
+    __import_pywin32_system_module__("pywintypes", globals())
+  File "C:\Python27\lib\site-packages\win32\lib\pywintypes.py", line 98, in __import_pywin32_system_module__
+    raise ImportError("No system module '%s' (%s)" % (modname, filename))
+ImportError: No system module 'pywintypes' (pywintypes27.dll)
+>>> ================================ RESTART ================================
+>>> 
+
+Traceback (most recent call last):
+  File "C:\Mabo\mabo.io\opcda\monitor.py", line 8, in <module>
+    import pythoncom
+  File "C:\Python27\lib\site-packages\pythoncom.py", line 2, in <module>
+    import pywintypes
+  File "C:\Python27\lib\site-packages\win32\lib\pywintypes.py", line 124, in <module>
+    __import_pywin32_system_module__("pywintypes", globals())
+  File "C:\Python27\lib\site-packages\win32\lib\pywintypes.py", line 98, in __import_pywin32_system_module__
+    raise ImportError("No system module '%s' (%s)" % (modname, filename))
+ImportError: No system module 'pywintypes' (pywintypes27.dll)
+>>> 

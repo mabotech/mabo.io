@@ -11,7 +11,7 @@ import time
 
 from mabopy.config.load_config import LoadConfig
 
-filename = "config.toml"
+filename = "config/config.toml"
     
 conf = LoadConfig(filename).config["app"]
 
@@ -25,7 +25,7 @@ QUEUE = conf["QUEUE"]
 
 db = redis.Redis(host=HOST, port=PORT, db=DB) 
 
-def post(tag):
+def post(data):
     
     #val = r.hget(tag, "val")
     #timestamp = r.hget(tag, "timestamp")
@@ -63,9 +63,12 @@ def post(tag):
     #print r.text,
     print json.loads(r.text)
     
-    print("%s" % (tag) ) 
+    print("%s" % (data) ) 
     
 
+def heartbeat():
+    pass
+    
 def main():
     
     
@@ -88,9 +91,11 @@ def main():
             val = db.lpop(QUEUE)
             
             if val != None:
-                v = msgpack.unpackb(val)
-                print v
-                #post()
+                
+                data = msgpack.unpackb(val)
+                
+                #post(data)
+                
             else:
                 #print "no val"
                 loop = False

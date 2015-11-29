@@ -1,0 +1,76 @@
+
+
+[app]
+
+host = "127.0.0.1"
+port = 23800
+
+#cmd = "AVFI"
+
+#cmd_seq = ["AVFI","AVFI"]
+
+#cmds = ["ASTZ"]
+#, "ASTZ", "AWRT"]
+
+seq_interval = 3
+
+ticker_interval = 5
+
+reconnection_interval = 5
+
+max_retry = 5
+retry_interval = 3
+
+timeout = 20
+
+#BEP,  MAHA, HORIBA, AVL
+
+equipment = "HORIBA"
+equipment_id = "eqm011" 
+
+# equipment =  "MAHA"
+# equipment_id = "eqm009"
+
+db_string = ""
+sql = ""
+
+## MAHA, eqm010
+
+channel_number = 0
+
+# for response telegram
+non_data_len = 10
+
+logging_config = "config/logging.json"
+log_base = "logs"
+app_name = "db_monitor"
+
+
+    [app.db]
+    ds_string = "DSN=MSSQL1;UID=sa;PWD=Py03thon"
+
+    max_overflow = 10
+
+    pool_size = 5
+
+    sql = "select top 1 * FROM [msdb].[dbo].[backupfile] order by 1 desc"
+
+[redis]
+
+host = "127.0.0.1"
+port = 6389
+db = 1
+
+lua_script = "lua/update2.lua"
+
+[influxdb]
+
+[heka]
+
+[logging]
+
+
+
+
+
+

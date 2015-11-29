@@ -5,6 +5,8 @@ AK Client
 AK Protocol
 
 """
+import json
+import toml
 
 import socket
 import struct
@@ -15,17 +17,49 @@ import traceback
 
 import gevent
 
-from conf import Conf
+from multi_logging import get_logger
 
-conf = Conf("ak_client.toml")
+#from conf import Conf
 
-from local_logger import get_logger
+#config_file = "config/ak_client.toml"
 
-logger = get_logger('AKCli')
+#conf = Conf(config_file)
+
+#conf_fn = os.sep.join(
+#    [os.path.split(os.path.realpath(__file__))[0], "config/ak_client.toml"])
+
+# print conf_fn
+
+conf_fn = "config/ak_client.toml"
+
+with open(conf_fn, "r") as conf_fh:
+
+    cfg = toml.loads(conf_fh.read())
+
+    conf = cfg["client"]
+
+with open(conf["logging_config"], "r") as fh:
+    
+    json_str = fh.read() 
+
+conf_json = json.loads(json_str)
+
+logger = get_logger(conf["log_base"], conf["app_name"], conf_json)
+
+logger.debug(conf)
+
+#from local_logger import get_logger
+
+#logger = get_logger('cli')
 
 #log = logbook.FileHandler('heka_tcp.log')
 
-import aklib
+
+from redis_lua import RedisLua
+
+from lib import aklib
+
+
 
 # static
 STX = 0x02
@@ -53,9 +87,7 @@ class AKClient(object):
     """
 
     def __init__(self):        
-        """ init """
-        
-        
+        """ init """      
         
         self.connected = 0
         self.closed = 0
@@ -67,6 +99,10 @@ class AKClient(object):
         self.retry = 0   
 
         self.last_errno = 0
+        
+        self.db = RedisLua()
+        
+        self.equipment_id = conf["equipment_id"]
         
         self.open()
         
@@ -80,17 +116,17 @@ class AKClient(object):
         """ connect """
         try:
             
-            logger.debug("connecting...")
+            #logger.debug("connecting...")
             
             if self.closed == 0:
                 
-                self.sock.connect((conf.host, conf.port))
+                self.sock.connect((conf["host"], conf["port"]))
 
             else:
                 # open a socket
                 #self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
                 self.open()
-                self.sock.connect((conf.host, conf.port))
+                self.sock.connect((conf["host"], conf["port"]))
                 
                 self.closed = 0
             
@@ -102,10 +138,11 @@ class AKClient(object):
             #logger.debug(traceback.format_exc())
             
             if self.last_errno == ex.errno:
-                logger.debug("[Errno %s]" %(ex.errno))
+                #logger.debug("[Errno %s]" %(ex.errno))
+                pass
             else:
                 self.last_errno = ex.errno
-                logger.debug(ex)               
+                #logger.debug(ex)               
                 
             self.connected = 0
             #self.sock = None
@@ -121,8 +158,9 @@ class AKClient(object):
             
         except Exception as ex:
             
-            logger.debug(ex)
-            logger.debug("closed?")
+            #logger.debug(ex)
+            #logger.debug("closed?")
+            pass
             
     def pack(self, cmd):        
         """ pack """        
@@ -132,8 +170,8 @@ class AKClient(object):
         # AK Command telegram
         fmt = "!2b%ds5b" % (clen)
         #print fmt
-        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, conf.channel_number, BLANK, ETX)
-        logger.debug(buf)
+        buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, K, conf["channel_number"], BLANK, ETX)
+        #logger.debug(buf)
         return buf
     
     def send(self, buf):        
@@ -141,39 +179,47 @@ class AKClient(object):
         try:
             self.sock.sendall(buf)
         except Exception as ex:
-            logger.debug(ex)
+            #logger.debug(ex)
             raise(Exception(ex))
             
     def parse(self, val):
         """ process received data """
-        logger.debug(val)
+        #logger.debug("parse: %s" % (val) )
         try:
             
+            #print val[2].lower()
             func =  getattr(aklib, val[2].lower())
-            data = val[6]
-            info = func(data)
+            length = len(val)
+            
+            message = val[length-2]
+            #logger.debug(result)
+            value = func(message.strip())
+            
+            #print data
+            #logger.debug("====== data ======[%s]" %(length))
+            #logger.debug(data)
+            # redis key, value
+            
+            self.db.save(self.equipment_id, value, message)
             
         except Exception as ex:
-            logger.debug(ex)
+            #logger.debug(ex)
             #'module' object has no attribute 'abcd'
-            raise Exception("no parser")         
+            raise Exception("no parser")
         
-        
-    def recv(self):        
+    def recv(self):
         """ recv """
         
         try:
             data = self.sock.recv(1024)
         except Exception as ex:
-            logger.debug(ex)
+            #logger.debug(ex)
             raise(Exception(ex))
-        
-        logger.debug( data )   
+        #logger.debug( data )   
         #print "data:%s:" %(data)
-        
         #return 0
         
-        dlen = len(data) - conf.non_data_len#10
+        dlen = len(data) - conf["non_data_len"]#10
         
         if dlen < 0:
             #raise Exception("struct error")
@@ -186,13 +232,17 @@ class AKClient(object):
         
         try:
             val = struct.unpack(fmt, data)
-            logger.debug(val)
+            
+            #logger.debug(val)
+           
             self.parse(val)
             
         except Exception as ex:
-            #logger.debug(ex)
-            logger.error(ex)
-        
+            #logger.debug("fmt:[%s]" % (fmt))
+            #logger.debug(traceback.format_exc())
+            #logger.error(ex)
+            pass
+            
         #print(val)
         
         #msg = "Cmd:[%s],Error:[%s], Data:[%s]" % (val[2], val[4], val[6])
@@ -219,16 +269,16 @@ class AKClient(object):
             self.recv()
             
         except Exception as ex:
-            logger.debug("182")
-            logger.debug(ex)            
-            self.close()            
+            #logger.debug(ex)            
+            self.close()
+            #print ex
             #ak_client.connect()
             self.connected = 0        
         
     
     def check_conn(self):
         
-        logger.debug(self.connected)
+        #logger.debug(self.connected)
         
         if self.connected == 0:
             self.connect()
@@ -244,7 +294,7 @@ class AKClient(object):
         
         if self.connected == 0:
             
-            if self.retry < conf.max_retry:
+            if self.retry < conf["max_retry"]:
                 self.connect()
             else:
                 raise (Exception("break"))           
@@ -275,27 +325,29 @@ class AKClient(object):
             if self.connected == 0:
                 
                 # sleep
-                gevent.sleep(conf.reconnection_interval)
+                gevent.sleep(conf["reconnection_interval"])
             
             else:
                 
-                cmd = "AVFI"
-                cmd = "AWEG"
-                cmd = "AWRT"
+                #cmd = "AVFI"
+                #cmd = "AWEG"
+                #cmd = "AWRT"
                 
-                cmds = ["ASTF", "ASTZ", "AWRT"]
+                cmds = conf["cmds"] #["ASTF", "ASTZ", "AWRT"]
                 
                 try:
                     if i<len(cmds):
                         
                         cmd = cmds[i]
                         
+                        #logger.debug("cmd>:%s" %(cmd) )
+                        
                         i = i +1
                         
                         self.get_data(cmd)
                         
                         # sleep
-                        gevent.sleep(conf.ticker_interval)
+                        gevent.sleep(conf["ticker_interval"])
                         
                     else:
                         i = 0
@@ -303,21 +355,25 @@ class AKClient(object):
                     
                 except Exception as ex:
                     logger.debug(ex)
-                    raise(Exception("loop broken"))
+                    #print ex
+                    #raise(Exception("loop broken"))
                 
             
-        #ak_client.close()        
+        #ak_client.close()
+
+
+
 
 def main():
     """ main """
     
-    logger.info("start AK client")
+    #logger.info("start AK client")
     
     ak_client = AKClient() 
     
     ak_client.run()
     
-    cfg = Conf()
+    #cfg = Conf()
     
     
 if __name__ == '__main__':

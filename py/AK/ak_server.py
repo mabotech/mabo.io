@@ -6,6 +6,7 @@ simulator for AK Server
 
 import socket
 import sys
+import traceback
 
 import thread
 #from thread import *
@@ -25,7 +26,8 @@ logger = logbook.Logger('AKSrv')
 
 #log = logbook.FileHandler('heka_tcp.log')
 
-log = logbook.RotatingFileHandler('ak_srv.log', max_size=10240, backup_count=5)
+log = logbook.RotatingFileHandler('logs/ak_server.log', max_size=10240, backup_count=5, \
+                    bubble=True)
 
 log.push_application()
 
@@ -56,7 +58,7 @@ def pack(cmd):
         # 0x48:'0'
         buf = struct.pack(fmt, STX, BLANK, cmd, BLANK, 0x48, BLANK, data, ETX) 
     
-    print buf
+    logger.debug(buf)
     
     return buf
 
@@ -83,7 +85,7 @@ def clientthread(conn):
                 
             val = struct.unpack(fmt, idata)
             
-            print(val)
+            logger.debug(val)
             
             if not idata: 
                 break
@@ -96,16 +98,16 @@ def clientthread(conn):
         #came out of loop
         conn.close()
     except Exception as ex:
-        print ex
+        logger.debug(ex)
         #print("client closed")
         #raise
 
 
 
-def main(): 
-    """ main """
+def server(): 
     
-    conf = get_conf("ak_server.toml")
+    """ server """
+    conf = get_conf("config/ak_server.toml")
     
     logger.info("start AK simulator server")
     host = conf["server"]["host"]
@@ -113,7 +115,8 @@ def main():
     port = conf["server"]["port"]
      
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print 'Socket created %s:%s' % (host, port)
+    
+    logger.debug('Socket created %s:%s' % (host, port) )
      
     #Bind socket to local host and port
     try:
@@ -121,14 +124,14 @@ def main():
         
     except socket.error as msg:
         
-        print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+        logger.debug('Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1] )
         sys.exit()
          
-    print 'Socket bind complete'
+    logger.debug('Socket bind complete')
      
     #Start listening on socket
     sock.listen(10)
-    print 'Socket now listening'
+    logger.debug('Socket now listening')
      
     #Function for handling connections. This will be used to create threads
 
@@ -136,13 +139,17 @@ def main():
     while 1:
         #wait to accept a connection - blocking call
         conn, addr = sock.accept()
-        print 'Connected with ' + addr[0] + ':' + str(addr[1])
+        logger.debug( 'Connected with ' + addr[0] + ':' + str(addr[1]) )
          
         # start new thread takes 1st argument as a function name to be run, 
         # second is the tuple of arguments to the function.
         thread.start_new_thread(clientthread ,(conn,))
      
     sock.close()
+    
+def main():
+    """ main """
+    server()
     
 if __name__ == "__main__":
     

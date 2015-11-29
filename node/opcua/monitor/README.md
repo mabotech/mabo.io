@@ -30,3 +30,8 @@ CircuitBreaker
 ## Install
 
 npm install
+
+
+### influxdb client
+
+npm install influx
