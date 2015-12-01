@@ -7,6 +7,10 @@ def main():
 
     t=1
 
+    # Linux
+    #client = ModbusSerialClient("rtu", port='/dev/ttyS1', baudrate=9600, timeout=t)
+    
+    # Windows
     client = ModbusSerialClient("rtu", port='COM4', baudrate=9600, timeout=t)
     
     client.connect()
