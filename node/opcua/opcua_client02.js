@@ -10,7 +10,7 @@ npm install node-opcua
 * opc ua client
 */
 var nconf = require('nconf');
-var winston = require('winston');
+//var winston = require('winston');
 
 var opcua = require("node-opcua");
 var async = require("async");
@@ -18,6 +18,7 @@ var async = require("async");
 nconf.file('config.json');
 
 console.log( nconf.get("logging"))
+/*
 var logger = winston.loggers.add('server', {
     console: {
         //silent:true,
@@ -27,7 +28,7 @@ var logger = winston.loggers.add('server', {
     },
     file: nconf.get("logging")
 });
-
+*/
 //logger.debug("debug")
 /*
 {

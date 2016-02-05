@@ -68,11 +68,11 @@ async.series([
  
    function(callback) {
     
-     the_session.readVariableValue(["ns=2;s=Channel1.Device1.MT","ns=2;s=Channel1.Device1.Tag1"], function(err,dataValues,diagnostics) {
+     the_session.readVariableValue(["ns=2;s=Channel1.Device1.Tag1","ns=2;s=Channel1.Device1.Tag2"], function(err,dataValues,diagnostics) {
        if (!err) {
         console.log(dataValues);
-         console.log(" Channel1.Device1.MT = " , dataValues[0].value.value);
-         console.log(" Channel1.Device1.Tag1 = " , dataValues[1].value.value);
+         console.log(" Channel1.Device1.Tag1 = " , dataValues[0].value.value);
+         console.log(" Channel1.Device1.Tag2 = " , dataValues[1].value.value);
        }
 
        callback(err);

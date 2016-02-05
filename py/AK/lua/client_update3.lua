@@ -48,8 +48,9 @@ else
     local equipment_id    
     local msg
     
+    -- diff channel
     if is_camera == nil then
-        
+        -- not a camera
         equipment_id = KEYS[1] 
     
         msg = cmsgpack.pack(
