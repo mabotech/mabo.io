@@ -1,0 +1,70 @@
+
+
+[client]
+
+host = "127.0.0.1"
+port = 23800
+
+#cmd = "AVFI"
+
+#cmd_seq = ["AVFI","AVFI"]
+
+cmds = ["ASTZ"]
+#, "ASTZ", "AWRT"]
+
+seq_interval = 3
+
+ticker_interval = 2
+
+reconnection_interval = 5
+
+max_retry = 5
+retry_interval = 3
+
+timeout = 20
+
+#BEP,  MAHA, HORIBA, AVL
+
+equipment = "BEP"
+equipment_id = "eqm009"
+
+channel_number = 0
+
+# for response telegram
+non_data_len = 10
+
+logging_config = "config/logging.json"
+log_base = "logs"
+app_name = "AKClient"
+
+[redis]
+
+host = "127.0.0.1"
+port = 6389
+db = 1
+
+lua_script = "lua/update3.lua"
+
+heartbeat_ttl = 6
+
+[influxdb]
+
+[heka]
+
+[logging]
+
+logfile = "logs/ak_client.log"
+
+level = "DEBUG"
+
+datetime_format = "local"
+
+max_size = 102400
+backup_count = 5
+
+# 0,1
+bubble = 0
+
+
+
+

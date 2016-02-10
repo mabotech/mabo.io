@@ -5,3 +5,5 @@
 dir = "testDir"
 
 target = "abc def"
+
+heartbeat = 3
